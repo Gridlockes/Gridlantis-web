@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip -l /home/kih/Projects/Gridlantis/Gridlantis-web/gridlantis-banner.zip)",
+      "Bash(unzip -l /home/kih/Projects/Gridlantis/Gridlantis-web/gridlantis-update.zip)",
+      "Bash(unzip -l /home/kih/Projects/Gridlantis/Gridlantis-web/missing-files.zip)",
+      "Bash(unzip -l /home/kih/Projects/Gridlantis/Gridlantis-web/gridlantis-tooling-fix.zip)",
+      "Bash(mkdir -p /tmp/claude-1000/-home-kih-Projects-Gridlantis-Gridlantis-web/22f724bf-60d0-4834-a789-dfb9000b75ec/scratchpad/bannerzip)",
+      "Bash(unzip -o -q /home/kih/Projects/Gridlantis/Gridlantis-web/gridlantis-banner.zip)",
+      "Bash(echo \"---exit: $?\")",
+      "Bash(xxd)"
+    ]
+  }
+}

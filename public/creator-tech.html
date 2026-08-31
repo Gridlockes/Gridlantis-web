@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creator Tech — tools for social media creators</title>
+<meta name="description" content="Studio, streaming and backup setup for people who post for a living.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16151C;
+    --seamless:#E3E5E8;
+    --seamless-deep:#CDD1D7;
+    --key:#FF9E1B;
+    --fill:#5B2BE0;
+    --line:#B4B9C1;
+    --paper:#F6F7F8;
+
+    --display:"Archivo Black", system-ui, sans-serif;
+    --body:"DM Sans", system-ui, sans-serif;
+    --mono:"DM Mono", ui-monospace, monospace;
+
+    --gutter:clamp(20px, 5vw, 72px);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    font-family:var(--body);
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 50% 0%, var(--paper) 0%, var(--seamless) 45%, var(--seamless-deep) 100%);
+    background-attachment:fixed;
+    line-height:1.55;
+  }
+  img,svg{max-width:100%;display:block}
+
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--fill); outline-offset:3px}
+
+  .wrap{max-width:1200px;margin-inline:auto;padding-inline:var(--gutter)}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#4A4956;
+    margin:0;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    padding-block:22px;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:var(--display);
+    font-size:1.05rem;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    text-decoration:none;
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--key);
+    box-shadow:0 0 0 3px rgba(255,158,27,.25);
+  }
+  .masthead nav{display:flex;gap:22px;font-family:var(--mono);font-size:.78rem;letter-spacing:.06em}
+  .masthead nav a{text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+  .masthead nav a:hover{border-bottom-color:var(--ink)}
+  @media (max-width:640px){ .masthead nav a:not(.nav-contact){display:none} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+    gap:clamp(32px,6vw,80px);
+    align-items:center;
+    padding-block:clamp(48px,9vw,104px);
+  }
+  @media (max-width:900px){ .hero{grid-template-columns:1fr} }
+
+  .hero h1{
+    font-family:var(--display);
+    font-size:clamp(2.6rem, 8.5vw, 5.6rem);
+    line-height:.94;
+    letter-spacing:-.02em;
+    margin:.35em 0 0;
+    text-transform:uppercase;
+  }
+  .hero h1 .lit{
+    color:var(--fill);
+  }
+  .hero p.lede{
+    max-width:46ch;
+    font-size:clamp(1.02rem,1.9vw,1.22rem);
+    margin:1.4em 0 0;
+    color:#33323D;
+  }
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
+    padding:15px 26px;border-radius:2px;text-decoration:none;border:1px solid var(--ink);
+    background:var(--ink);color:var(--paper);
+    transition:transform .15s ease, background .15s ease, color .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);background:var(--fill);border-color:var(--fill)}
+  .btn--ghost{background:transparent;color:var(--ink)}
+  .btn--ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  /* ---------- signature: the record frame ---------- */
+  .rig{display:flex;justify-content:center}
+  .frame{
+    position:relative;
+    width:min(320px,78vw);
+    aspect-ratio:9/16;
+    background:linear-gradient(170deg,#1D1B26 0%,#2C2438 55%,#3A2A2A 100%);
+    border-radius:4px;
+    overflow:hidden;
+    box-shadow:0 40px 70px -30px rgba(22,21,28,.55);
+  }
+  .frame .thirds{position:absolute;inset:0}
+  .frame .thirds span{position:absolute;background:rgba(246,247,248,.16)}
+  .frame .thirds span:nth-child(1){left:33.33%;top:0;bottom:0;width:1px}
+  .frame .thirds span:nth-child(2){left:66.66%;top:0;bottom:0;width:1px}
+  .frame .thirds span:nth-child(3){top:33.33%;left:0;right:0;height:1px}
+  .frame .thirds span:nth-child(4){top:66.66%;left:0;right:0;height:1px}
+
+  .corner{position:absolute;width:26px;height:26px;border:2px solid var(--key)}
+  .corner.tl{top:14px;left:14px;border-right:0;border-bottom:0}
+  .corner.tr{top:14px;right:14px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:14px;left:14px;border-right:0;border-top:0}
+  .corner.br{bottom:14px;right:14px;border-left:0;border-top:0}
+
+  .hud{
+    position:absolute;left:0;right:0;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:24px 26px;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:#EDEDF2;
+  }
+  .hud.top{top:0}
+  .hud.bottom{bottom:0}
+  .rec{display:flex;align-items:center;gap:7px}
+  .rec i{width:8px;height:8px;border-radius:50%;background:#FF4B3E;animation:blink 1.6s steps(1,end) infinite}
+  @keyframes blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+
+  .safe{
+    position:absolute;left:50%;transform:translateX(-50%);
+    bottom:96px;width:76%;
+    border:1px dashed rgba(255,158,27,.55);
+    padding:10px 12px;border-radius:2px;
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;color:rgba(255,158,27,.9);
+    text-align:center;
+  }
+  .glow{
+    position:absolute;width:180px;height:180px;border-radius:50%;filter:blur(46px);opacity:.55;
+  }
+  .glow.a{background:var(--key);top:-40px;right:-40px}
+  .glow.b{background:var(--fill);bottom:-30px;left:-50px;opacity:.7}
+
+  .rig-caption{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+    color:#4A4956;text-align:center;margin-top:16px;
+  }
+
+  /* ---------- platform strip ---------- */
+  .platforms{
+    border-block:1px solid var(--line);
+    padding-block:clamp(38px,6vw,60px);
+  }
+  .platforms h2{
+    font-family:var(--display);
+    font-size:clamp(1.3rem,2.6vw,1.9rem);
+    text-transform:uppercase;letter-spacing:-.01em;
+    margin:10px 0 0;
+  }
+  .platform-grid{
+    margin-top:34px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .platform{
+    background:var(--paper);
+    padding:34px 20px;
+    display:flex;align-items:center;justify-content:center;
+    min-height:110px;
+    transition:background .18s ease;
+  }
+  .platform:hover{background:var(--ink)}
+  .platform-name{
+    font-family:var(--display);font-size:1.18rem;letter-spacing:-.01em;text-transform:uppercase;
+    text-align:center;
+  }
+  .platform-name.tiktok{color:#D6224B}
+  .platform-name.instagram{
+    background:linear-gradient(70deg,#F58529 0%,#DD2A7B 55%,#8134AF 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .platform-name.youtube{color:#D3170F}
+  .platform-name.twitch{color:#7A32E6}
+  .platform-name.discord{color:#4655D6}
+
+  /* ---------- services ---------- */
+  .services{padding-block:clamp(48px,8vw,88px)}
+  .services h2{
+    font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);
+    text-transform:uppercase;letter-spacing:-.015em;margin:10px 0 0;max-width:18ch;
+  }
+  .service-list{
+    margin:38px 0 0;padding:0;list-style:none;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;
+  }
+  .service-list li{border-top:2px solid var(--ink);padding-top:16px}
+  .service-list h3{font-family:var(--body);font-weight:700;font-size:1.05rem;margin:0 0 6px}
+  .service-list p{margin:0;color:#43424E;font-size:.95rem}
+  .service-link{display:block;text-decoration:none;color:inherit}
+  .service-link h3{display:flex;align-items:center;gap:8px}
+  .service-link .arrow{
+    font-family:var(--mono);color:var(--key);
+    transition:transform .18s ease;
+  }
+  .service-link:hover .arrow,
+  .service-link:focus-visible .arrow{transform:translateX(5px)}
+  .service-link:hover h3{text-decoration:underline;text-underline-offset:3px}
+
+  /* ---------- contact ---------- */
+  .contact{
+    background:var(--ink);color:var(--paper);
+    padding-block:clamp(52px,8vw,96px);
+  }
+  .contact .eyebrow{color:var(--key)}
+  .contact-inner{
+    display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+    gap:clamp(32px,6vw,72px);align-items:start;
+  }
+  @media (max-width:860px){ .contact-inner{grid-template-columns:1fr} }
+  .contact h2{
+    font-family:var(--display);font-size:clamp(2rem,5vw,3.2rem);
+    text-transform:uppercase;line-height:.98;letter-spacing:-.02em;margin:10px 0 0;
+  }
+  .contact .lede{color:rgba(246,247,248,.72);max-width:36ch;margin-top:18px}
+  .contact-meta{margin-top:28px;font-family:var(--mono);font-size:.8rem;letter-spacing:.05em;line-height:2}
+  .contact-meta a{color:var(--key)}
+
+  .field{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+  .field label{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(246,247,248,.66);
+  }
+  .field input,.field select,.field textarea{
+    font-family:var(--body);font-size:1rem;color:var(--paper);
+    background:transparent;border:1px solid rgba(246,247,248,.28);border-radius:2px;
+    padding:13px 14px;
+  }
+  .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--key) 50%),linear-gradient(135deg,var(--key) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
+  .field select option{color:var(--ink)}
+  .field textarea{resize:vertical;min-height:120px}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--key)}
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:520px){ .row-2{grid-template-columns:1fr} }
+  .btn--send{background:var(--key);color:var(--ink);border-color:var(--key);cursor:pointer;font-family:var(--mono)}
+  .btn--send:hover{background:var(--paper);border-color:var(--paper);color:var(--ink)}
+  .form-note{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:rgba(246,247,248,.5);margin-top:14px}
+
+  footer{background:var(--ink);color:rgba(246,247,248,.5);padding-bottom:40px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
+    border-top:1px solid rgba(246,247,248,.14);padding-top:24px;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.06em}
+
+  /* Touch targets. These links are inline text, so their box is only as tall
+     as the line (16-28px). On a phone that is well under the 44px a fingertip
+     needs, so pad them out where the pointer is coarse. */
+  @media (max-width: 780px){
+    .masthead nav a,
+    .brand,
+    .service-link,
+    .foot-links a,
+    .contact-meta a{
+      display:inline-flex;
+      align-items:center;
+      min-height:44px;
+    }
+    .masthead nav{ gap:4px 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="index.html">Gridlantis</a>
+    <nav aria-label="Primary">
+      <a href="#platforms">Platforms</a>
+      <a href="#services">What we set up</a>
+      <a class="nav-contact" href="#contact">Contact us</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div>
+      <p class="eyebrow">Foster your community</p>
+      <h1>For social<br>media <span class="lit">creators</span></h1>
+      <p class="lede">Take the worry out of the logistics and just post.</p>
+      <div class="cta-row">
+        <a class="btn" href="#contact">Book a setup call</a>
+        <a class="btn btn--ghost" href="#services">See what we set up</a>
+      </div>
+    </div>
+
+    <div class="rig">
+      <div>
+        <div class="frame" role="img" aria-label="A vertical 9:16 camera viewfinder showing framing guides, a recording indicator and a caption safe zone.">
+          <span class="glow a" aria-hidden="true"></span>
+          <span class="glow b" aria-hidden="true"></span>
+          <div class="thirds" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+          <span class="corner tl" aria-hidden="true"></span>
+          <span class="corner tr" aria-hidden="true"></span>
+          <span class="corner bl" aria-hidden="true"></span>
+          <span class="corner br" aria-hidden="true"></span>
+          <div class="hud top">
+            <span class="rec"><i aria-hidden="true"></i>REC</span>
+            <span id="timecode">00:00:00:00</span>
+          </div>
+          <div class="safe" aria-hidden="true">CAPTION SAFE ZONE</div>
+          <div class="hud bottom">
+            <span>9:16 · 4K60</span>
+            <span>ISO 400</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="platforms" id="platforms">
+  <div class="wrap">
+    <p class="eyebrow">Where your work lands</p>
+    <h2>Set up for the platforms you post on</h2>
+    <div class="platform-grid">
+      <div class="platform"><span class="platform-name tiktok">TikTok</span></div>
+      <div class="platform"><span class="platform-name instagram">Instagram</span></div>
+      <div class="platform"><span class="platform-name youtube">YouTube</span></div>
+      <div class="platform"><span class="platform-name twitch">Twitch</span></div>
+      <div class="platform"><span class="platform-name discord">Discord</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <p class="eyebrow">Things we handle</p>
+    <h2>The hard parts</h2>
+    <ul class="service-list">
+      <li>
+        <h3>Post automation dashboards</h3>
+        <p>Schedule posts and monitor social media analytics. See all of your social media presence in one place.</p>
+      </li>
+      <li>
+        <h3>Community engagement</h3>
+        <p>Custom made bots for your brand, with automation, post and live stream notifications, moderation, advertising and more.</p>
+      </li>
+      <li>
+        <a class="service-link" href="bot.html">
+          <h3>Need a bot? We got that covered too <span class="arrow" aria-hidden="true">&rarr;</span></h3>
+          <p>Chat bots for Discord, Slack and Telegram — built, hosted and maintained by us. See what we build.</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-inner">
+    <div>
+      <p class="eyebrow">Contact us</p>
+      <h2>Tell us what<br>you're building</h2>
+      <p class="lede">Send your channel and a rough idea of the setup. We'll reply within one business day with a plan and a price.</p>
+      <div class="contact-meta">
+        <a href="https://gridlantis.org">Gridlantis.org</a><br>
+        Detroit, MI · Remote worldwide<br>
+        Mon–Fri, 9am–6pm ET
+      </div>
+    </div>
+
+    <form id="contact-form" novalidate>
+      <div class="row-2">
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="handle">Main handle</label>
+          <input id="handle" name="handle" type="text" placeholder="@yourname" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="platform">Main platform</label>
+        <select id="platform" name="platform">
+          <option>TikTok</option>
+          <option>Instagram</option>
+          <option>YouTube</option>
+          <option>Twitch</option>
+          <option>Podcast</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="message">What do you need set up?</label>
+        <textarea id="message" name="message" placeholder="Room size, current gear, what keeps going wrong."></textarea>
+      </div>
+      <button class="btn btn--send" type="submit">Send message</button>
+      <p class="form-note" id="form-note">Connect this form to an endpoint before launch — it doesn't send anywhere yet.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Gridlantis</span>
+    <span>Built for people who post for a living</span>
+  </div>
+</footer>
+
+<script>
+  // Running timecode in the viewfinder, counting up from page load.
+  (function () {
+    var el = document.getElementById('timecode');
+    if (!el) return;
+    var start = Date.now();
+    var pad = function (n, w) { return String(n).padStart(w || 2, '0'); };
+    setInterval(function () {
+      var ms = Date.now() - start;
+      var f = Math.floor((ms % 1000) / (1000 / 30));
+      var s = Math.floor(ms / 1000) % 60;
+      var m = Math.floor(ms / 60000) % 60;
+      var h = Math.floor(ms / 3600000);
+      el.textContent = pad(h) + ':' + pad(m) + ':' + pad(s) + ':' + pad(f);
+    }, 100);
+  })();
+
+  // Placeholder submit handler — replace with a real endpoint.
+  document.getElementById('contact-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var note = document.getElementById('form-note');
+    note.textContent = 'No endpoint connected yet — wire this up to send.';
+  });
+</script>
+</body>
+</html>

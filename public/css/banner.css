@@ -1,0 +1,422 @@
+/* ==========================================================================
+   Full-bleed banner carousel
+   Distinct from .carousel-section (the hero carousel), which is a centred
+   90%-width card. This one breaks out of the page container edge-to-edge.
+   ========================================================================== */
+
+.banner-carousel {
+  /* Full-bleed trick: 100vw wide, pulled back to the viewport edges regardless
+     of the parent's max-width. calc handles the scrollbar gutter so it doesn't
+     introduce horizontal overflow. */
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-block: 0;
+  background: #0b1026;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Thin gradient rules top and bottom to seat the band into the page. */
+.banner-carousel::before,
+.banner-carousel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00e0ff, #1400ff);
+  z-index: 3;
+}
+.banner-carousel::before { top: 0; }
+.banner-carousel::after { bottom: 0; }
+
+.banner-viewport {
+  position: relative;
+  width: 100%;
+  /* Match the 1200x400 authoring space, so on anything wide enough the art
+     lands 1:1 in its box - no crop, no dead band. Below ~960px the ratio would
+     leave a strip too short for the caption, so min-height takes over and the
+     canvas covers (crops the sides) instead. That crop is what keeps the
+     hardcoded 11px labels legible on a phone rather than shrinking them to 3px.
+     max-height stops it eating a whole 4K screen. */
+  aspect-ratio: 3 / 1;
+  min-height: 320px;
+  max-height: 640px;
+}
+
+.banner-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease;
+}
+
+.banner-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-slide { transition: none; }
+}
+
+.banner-slide canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- caption overlay ---------------------------------------------------- */
+
+.banner-caption {
+  position: absolute;
+  left: clamp(16px, 4vw, 56px);
+  bottom: clamp(6px, 1.5vw, 14px);
+  z-index: 2;
+  max-width: min(46ch, 62%);
+  pointer-events: none;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: rgba(16, 22, 46, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+}
+
+.banner-caption h3 {
+  margin: 0 0 6px;
+  font-size: clamp(1.1rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.75), 0 2px 6px rgba(0, 0, 0, 0.75), 0 8px 20px rgba(0, 0, 0, 0.55);
+}
+
+.banner-caption p {
+  margin: 0;
+  font-size: clamp(0.8rem, 1.4vw, 0.95rem);
+  font-weight: 600;
+  color: #eef3ff;
+  line-height: 1.5;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.75), 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* The caption panel itself must not eat clicks aimed at the canvas behind it,
+   but the CTA inside it has to stay clickable. Re-enable interaction on the
+   caption's interactive children rather than on .banner-cta alone, so a link
+   added here later is clickable without anyone remembering this rule. */
+.banner-caption a,
+.banner-caption button {
+  pointer-events: auto;
+}
+
+.banner-cta {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 11px 22px;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: linear-gradient(135deg, #5ee7f5 0%, #4dd0e1 45%, #4aa8ff 100%);
+  color: #06121f;
+  font-size: clamp(0.78rem, 1.3vw, 0.92rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow:
+    0 6px 18px rgba(6, 18, 31, 0.45),
+    0 0 0 0 rgba(77, 208, 225, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition:
+    transform 0.22s cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 0.22s ease,
+    filter 0.22s ease;
+}
+
+/* Sheen that sweeps across on hover. Rounded to match the pill via inherit,
+   and kept behind the label by the negative z-index inside the isolate
+   context established above. */
+.banner-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 45%,
+    transparent 70%
+  );
+  background-size: 260% 100%;
+  background-position: 130% 0;
+  opacity: 0;
+  transition: background-position 0.6s ease, opacity 0.2s ease;
+}
+
+.banner-cta:hover {
+  transform: translateY(-2px);
+  filter: saturate(115%);
+  box-shadow:
+    0 10px 26px rgba(6, 18, 31, 0.5),
+    0 0 0 6px rgba(77, 208, 225, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.banner-cta:hover::before {
+  opacity: 1;
+  background-position: -30% 0;
+}
+
+.banner-cta:active {
+  transform: translateY(0);
+  box-shadow:
+    0 3px 10px rgba(6, 18, 31, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.banner-cta:focus-visible {
+  outline: 3px solid #9df3ff;
+  outline-offset: 3px;
+}
+
+.banner-cta i {
+  font-size: 0.85em;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.banner-cta:hover i {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-cta,
+  .banner-cta::before,
+  .banner-cta i {
+    transition: none;
+  }
+  .banner-cta:hover {
+    transform: none;
+  }
+  .banner-cta:hover i {
+    transform: none;
+  }
+  .banner-cta:hover::before {
+    opacity: 0;
+  }
+}
+
+/* --- data overlays (followers slide) ------------------------------------ */
+
+.banner-stat {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.banner-stat-label {
+  font-size: clamp(9px, 1.05vw, 13px);
+  color: #8fa6d4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+}
+
+.banner-stat-value {
+  font-size: clamp(20px, 3.6vw, 44px);
+  line-height: 1;
+  color: #e7efff;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.banner-stat-value span {
+  display: inline-block;
+  animation: banner-roll 0.3s ease-out;
+}
+
+@keyframes banner-roll {
+  from { transform: translateY(55%); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-stat-value span { animation: none; }
+}
+
+.banner-chip {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: clamp(9px, 1.05vw, 13px);
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #123a33;
+  color: #5de8c0;
+}
+
+/* --- node overlays (nexus slide) ---------------------------------------- */
+
+.banner-node {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.banner-node-icon {
+  width: clamp(30px, 4.6vw, 56px);
+  height: clamp(30px, 4.6vw, 56px);
+  border-radius: 50%;
+  background: #15224a;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(14px, 2.2vw, 26px);
+  margin: 0 auto;
+  position: relative;
+}
+
+.banner-node-label {
+  margin-top: 6px;
+  font-size: clamp(9px, 1vw, 12px);
+  color: #9fb4dd;
+}
+
+.banner-node-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  font-size: 11px;
+  line-height: 18px;
+  padding: 0 5px;
+  color: #0b1026;
+  font-weight: 500;
+}
+
+/* --- controls ----------------------------------------------------------- */
+
+.banner-controls {
+  position: absolute;
+  right: clamp(12px, 3vw, 32px);
+  bottom: clamp(12px, 3vw, 28px);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.banner-btn {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(143 166 212 / 0.35);
+  border-radius: 50%;
+  background: rgb(11 16 38 / 0.72);
+  backdrop-filter: blur(6px);
+  color: #e7efff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.banner-btn:hover {
+  background: rgb(21 34 74 / 0.9);
+  border-color: #4dd0e1;
+}
+
+.banner-btn:focus-visible {
+  outline: 2px solid #4dd0e1;
+  outline-offset: 2px;
+}
+
+.banner-play {
+  width: auto;
+  border-radius: 20px;
+  padding: 0 14px;
+  gap: 7px;
+  grid-auto-flow: column;
+  font-size: 0.8rem;
+}
+
+.banner-dots {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(12px, 3vw, 28px);
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  gap: 4px;
+}
+
+/* The button is the touch target (>=44px tall, per WCAG 2.5.8); the dot you
+   actually see is the pseudo-element. Sizing the button to the dot would leave
+   a 9px tap target, which is unusable on a phone. */
+.banner-dot {
+  width: 30px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.banner-dot::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgb(143 166 212 / 0.4);
+  transition: background 0.25s ease, width 0.25s ease;
+}
+
+.banner-dot.is-active::before {
+  width: 26px;
+  border-radius: 5px;
+  background: #4dd0e1;
+}
+
+.banner-dot:focus-visible {
+  outline: 0;
+}
+
+.banner-dot:focus-visible::before {
+  outline: 2px solid #4dd0e1;
+  outline-offset: 3px;
+}
+
+/* Below ~600px the caption competes with the artwork for space. */
+@media (max-width: 600px) {
+  .banner-caption { max-width: 78%; bottom: 40px; }
+  .banner-controls { bottom: 10px; right: 10px; }
+  .banner-dots { bottom: 16px; }
+  .banner-node-label { display: none; }
+}
+
+.banner-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

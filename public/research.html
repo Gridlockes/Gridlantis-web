@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research | Gridlantis Labs</title>
+<meta name="description" content="Open research log from Gridlantis Labs. Connectome simulation, autonomous ground robotics, and public-signal monitoring.">
+<style>
+/* ------------------------------------------------------------------
+   GRIDLANTIS / RESEARCH
+   Single file. No build step, no external requests, no dependencies.
+   Palette: white page, pale blue recessed strips, deep blue accent.
+   Type:    monospace as the display face, serif as the reading face.
+   ------------------------------------------------------------------ */
+
+:root{
+  --paper:     #ffffff;   /* page ground */
+  --mist:      #e3e9f0;   /* pale blue, recessed strips */
+  --rule:      #c6d2e0;   /* hairlines and borders */
+  --grid:      #dbe4ee;   /* faint graticule behind the hero */
+  --ink:       #22272e;   /* primary text, blue-cast near-black */
+  --ink-dim:   #545c66;   /* secondary text */
+  --signal:    #1f5aa6;   /* deep blue, the accent and the live trace */
+  --trace:     #7ea6d4;   /* pale blue, the second trace channel */
+
+  --mono: ui-monospace, "JetBrains Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --serif: "Iowan Old Style", "Source Serif 4", "Charter", Georgia, "Noto Serif", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
+
+  /* Face used for the hero statement. Swap to var(--sans) for a
+     Swiss/technical-poster feel, or var(--serif) for the old look. */
+  --display: var(--mono);
+
+  --gut: clamp(1.25rem, 4vw, 3.5rem);
+  --max: 1180px;
+}
+
+*{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior: auto; } }
+
+body{
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.62;
+}
+
+a{ color: inherit; }
+
+:focus-visible{
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.wrap{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gut);
+}
+
+/* ---------- utility type ---------- */
+
+.tag-line{
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* ---------- masthead ---------- */
+
+.masthead{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.masthead-inner{
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 58px;
+}
+.mark{
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.mark b{ font-weight: 700; }
+.mark span{ color: var(--signal); }
+
+.masthead-nav{
+  margin-left: auto;
+  display: flex;
+  gap: 1.4rem;
+}
+.masthead-nav a{
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+}
+.masthead-nav a:hover{ color: var(--ink); border-bottom-color: var(--signal); }
+
+@media (max-width: 620px){
+  .masthead-nav a:not(.keep){ display:none; }
+}
+
+/* "GRIDLANTIS / RESEARCH" is nowrap and widely letterspaced; on a 320px
+   handset it plus the Collaborate link is wider than the gutter allows, which
+   pushed the whole document sideways. Tighten the tracking rather than wrap. */
+@media (max-width: 400px){
+  .masthead-inner{ gap: 0.5rem; }
+  .mark{ font-size: 11px; letter-spacing: 0.12em; }
+  .masthead-nav a{ font-size: 10px; letter-spacing: 0.1em; }
+}
+
+/* Touch targets. The chips, the masthead links and the contact rows are all
+   sized to their (small, monospaced) text, which leaves a 21-27px box — well
+   under the 44px a fingertip needs. */
+@media (max-width: 780px){
+  .chip{ min-height: 44px; }
+  .mark,
+  .masthead-nav a,
+  .colophon a{
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .contact-list a{ padding-block: 0.85rem; min-height: 44px; align-items: center; }
+  .entry-links a{ min-height: 44px; display: inline-flex; align-items: center; }
+}
+
+/* ---------- hero ---------- */
+
+.hero{
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+  /* Static quadrille grid in CSS, the "grid" in Gridlantis. The moving
+     trace is drawn on the canvas layered above this. */
+  background:
+    repeating-linear-gradient(to right,  var(--grid) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(to bottom, var(--grid) 0 1px, transparent 1px 48px),
+    var(--paper);
+}
+.hero-canvas{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.hero-inner{
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(4rem, 13vw, 8.5rem) clamp(4.5rem, 11vw, 7.5rem);
+}
+.hero h1{
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.4vw, 3.05rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 1.3rem 0 0;
+  max-width: 26ch;
+}
+.hero h1 em{
+  /* Monospace faces rarely ship a true italic, and browsers fake it
+     badly at display size, so the accent carries the emphasis. */
+  font-style: normal;
+  color: var(--signal);
+}
+.hero-sub{
+  margin: 1.6rem 0 0;
+  max-width: 56ch;
+  color: var(--ink-dim);
+  font-size: 1.06rem;
+}
+
+/* ---------- thesis strip ---------- */
+
+.thesis{
+  border-bottom: 1px solid var(--rule);
+  background: var(--mist);
+}
+.thesis-inner{
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+@media (max-width: 760px){
+  .thesis-inner{ grid-template-columns: 1fr; }
+}
+.thesis p{
+  margin: 0 0 1rem;
+  font-size: 1.12rem;
+}
+.thesis p:last-child{ margin-bottom: 0; }
+.thesis strong{
+  font-weight: 400;
+  color: var(--signal);
+  font-style: italic;
+}
+
+/* ---------- filter rail ---------- */
+
+.controls{
+  position: sticky;
+  top: 58px;
+  z-index: 15;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.controls-inner{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-block: 0.7rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.controls-inner::-webkit-scrollbar{ display:none; }
+.chip{
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 6px 11px;
+  cursor: pointer;
+}
+.chip:hover{ color: var(--ink); border-color: var(--ink-dim); }
+.chip[aria-pressed="true"]{
+  color: var(--paper);
+  background: var(--signal);
+  border-color: var(--signal);
+  font-weight: 700;
+}
+.count{
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding-left: 1rem;
+}
+
+/* ---------- entries ---------- */
+
+.log{ padding-block: clamp(2rem, 6vw, 4rem) 1rem; }
+
+.entry{
+  border-top: 1px solid var(--rule);
+  padding: clamp(2rem, 5vw, 3.2rem) 0;
+}
+.entry:first-child{ border-top: 0; }
+.entry[hidden]{ display: none; }
+
+.entry-name{
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin: 0 0 0.7rem;
+}
+.entry-expansion{
+  display: block;
+  margin-top: 0.3rem;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+}
+.entry h2{
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3.4vw, 2.15rem);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.9rem;
+  max-width: 24ch;
+}
+.entry-abstract{
+  margin: 0 0 1.6rem;
+  max-width: 66ch;
+}
+.question{
+  margin: 0 0 1.6rem;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--signal);
+  max-width: 62ch;
+  font-style: italic;
+}
+.question .tag-line{
+  display: block;
+  font-style: normal;
+  margin-bottom: 0.35rem;
+}
+
+.spec{
+  border-top: 1px solid var(--rule);
+  margin: 0;
+  max-width: 74ch;
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+}
+.spec dt,
+.spec dd{
+  border-bottom: 1px solid var(--rule);
+  padding: 0.6rem 0;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.spec dt{
+  color: var(--ink-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 11px;
+  padding-right: 1rem;
+}
+@media (max-width: 520px){
+  .spec{ grid-template-columns: 1fr; }
+  .spec dt{ border-bottom: 0; padding-bottom: 0.15rem; }
+}
+
+.entry-links{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+.entry-links a{
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 7px 12px;
+}
+.entry-links a:hover{
+  border-color: var(--signal);
+  color: var(--signal);
+}
+
+/* ---------- entry media ---------- */
+
+.entry-grid{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(220px, 26vw, 340px);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+.entry-body{ min-width: 0; }
+
+.entry-media{
+  margin: 0;
+  position: sticky;
+  top: 78px;
+}
+.entry-media img{
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 0.8rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+.entry-media figcaption{
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-top: 0.55rem;
+}
+
+@media (max-width: 860px){
+  .entry-grid{ grid-template-columns: 1fr; }
+  .entry-media{ position: static; order: -1; max-width: 460px; margin-bottom: 0.4rem; }
+}
+@media (prefers-reduced-motion: reduce){
+  .entry-media{ position: static; }
+}
+
+.empty{
+  padding: 4rem 0;
+  text-align: center;
+  color: var(--ink-dim);
+}
+.empty[hidden]{ display:none; }
+
+/* ---------- collaborate ---------- */
+
+.collab{
+  border-top: 1px solid var(--rule);
+  background: var(--mist);
+}
+.collab-inner{
+  padding-block: clamp(3rem, 8vw, 5.5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: start;
+}
+@media (max-width: 760px){
+  .collab-inner{ grid-template-columns: 1fr; }
+}
+.collab h2{
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.8rem, 4.4vw, 2.9rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: 0.9rem 0 1rem;
+  max-width: 18ch;
+}
+.collab p{ color: var(--ink-dim); max-width: 50ch; margin: 0 0 1.4rem; }
+.button{
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--paper);
+  background: var(--signal);
+  border-radius: 2px;
+  padding: 13px 22px;
+}
+.button:hover{ background: var(--ink); }
+
+.contact-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.contact-list li{ border-bottom: 1px solid var(--rule); }
+.contact-list a{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+.contact-list a:hover{ color: var(--signal); }
+.contact-list span{ color: var(--ink-dim); }
+
+/* ---------- colophon ---------- */
+
+.colophon{
+  border-top: 1px solid var(--rule);
+  padding-block: 2rem 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2rem;
+  justify-content: space-between;
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead-inner">
+    <a class="mark" href="index.html"><b>GRIDLANTIS</b> <span>/</span> RESEARCH</a>
+    <nav class="masthead-nav" aria-label="Section">
+      <a href="#thesis">Why</a>
+      <a href="#log">Log</a>
+      <a href="#collaborate" class="keep">Collaborate</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <canvas class="hero-canvas" data-trace="hero" aria-hidden="true"></canvas>
+    <div class="wrap hero-inner">
+      <p class="tag-line">Open research log</p>
+      <h1>We build the things to find out <em>if and how they work</em></h1>
+      <p class="hero-sub">
+        Gridlantis runs a small, self-funded Build lab alongside the services
+        practice. Everything below is live work: neural simulation, ground robotics,
+        and public-signal monitoring.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ THESIS ============ -->
+  <section class="thesis" id="thesis">
+    <div class="wrap thesis-inner">
+      <p class="tag-line">Why a services company runs a lab</p>
+      <div>
+        <p>
+          The Build lab exists to answer questions the client work keeps raising.
+          <strong>How little can a tool depend on and still be worth running?</strong>
+          <strong>What can stay on the device instead of leaving the building?</strong>
+          <strong>Where does a control loop stop being arithmetic and start being behavior?</strong>
+        </p>
+        <p>
+          The entries below are written the way they are kept: setup, open question,
+          current state. When a result comes in, it gets posted here whether or not
+          it supports the hypothesis.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FILTERS ============ -->
+  <div class="controls">
+    <div class="wrap controls-inner" role="group" aria-label="Filter research entries by field">
+      <button class="chip" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" data-filter="neuro" aria-pressed="false">Neural simulation</button>
+      <button class="chip" data-filter="robotics" aria-pressed="false">Robotics</button>
+      <button class="chip" data-filter="infra" aria-pressed="false">Infrastructure</button>
+      <p class="tag-line count" id="count" aria-live="polite">3 shown</p>
+    </div>
+  </div>
+
+  <!-- ============ LOG ============ -->
+  <section class="wrap log" id="log">
+
+    <!-- ---- entry ---- -->
+    <article class="entry" data-field="neuro">
+      <div class="entry-grid">
+        <div class="entry-body">
+        <p class="entry-name">Fly neuron test</p>
+        <h2>A fly brain, wired from the connectome, driving a physical body</h2>
+        <p class="entry-abstract">
+          The FlyWire FAFB dataset gives a full synapse-level wiring diagram of an adult
+          fruit fly brain. FlyGym gives a physics body, a NeuroMechFly model with real
+          joint limits, contact, and gravity, simulated in MuJoCo. This line couples the
+          two: the connectome supplies the network topology, the body supplies the sensory
+          input and consumes the motor output, and nothing in between is hand-tuned to make
+          walking happen.
+        </p>
+        <p class="question">
+          <span class="tag-line">Open question</span>
+          If the only thing you specify is who connects to whom, how much coordinated
+          behavior falls out of the structure by itself?
+        </p>
+        <dl class="spec">
+          <dt>Connectome</dt><dd>FlyWire FAFB, adult female brain</dd>
+          <dt>Body &amp; physics</dt><dd>FlyGym 2.1.0 (NeuroMechFly) on MuJoCo</dd>
+          <dt>Bench</dt><dd>CachyOS Linux · NVIDIA RTX 3060, 12&nbsp;GB VRAM</dd>
+          <dt>Next step</dt><dd>Shuffled-connectome control run with the same degree distribution and randomized edges</dd>
+          <dt>Where it stands</dt><dd>Coupling verified, baseline gait not yet characterized</dd>
+        </dl>
+        <p class="entry-links">
+          <a href="#collaborate">Ask about this line</a>
+        </p>
+        </div>
+        <figure class="entry-media">
+          <img src="/flybrain_neurons_pic.webp" width="1621" height="855" loading="lazy" decoding="async"
+               alt="Rendering of an adult fruit fly brain from the FlyWire connectome, with optic lobes, mushroom bodies, and central complex neurons traced in blue, orange, and magenta.">
+          <figcaption>FlyWire FAFB &mdash; adult brain, traced neuron populations</figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <!-- ---- entry ---- -->
+    <article class="entry" data-field="robotics">
+      <div class="entry-grid">
+        <div class="entry-body">
+        <p class="entry-name">R.I.M.D.A.R<span class="entry-expansion">Robotic &middot; Intelligent &middot; Mobile &middot; Driving &middot; Autonomous &middot; Rover</span></p>
+        <h2>Obstacle avoidance without a map</h2>
+        <p class="entry-abstract">
+          A four-wheel ground platform on a Raspberry Pi 4B, driven through an L298N motor
+          bridge, with three RCWL-1601 ultrasonic rangefinders reading left, center, and
+          right. No simultaneous localization and mapping, no odometry, no memory of the
+          room, just three distances and a control loop. The interesting work turned out
+          to be everything around the decision: slew-rate limiting so the chassis stops
+          lurching, dynamic braking so it stops where it decided to, and a calibration pass
+          because the sensors disagree with each other and with the tape measure.
+        </p>
+        <p class="question">
+          <span class="tag-line">Open question</span>
+          How far can a purely reactive robot get before the absence of a map is the thing
+          that actually stops it?
+        </p>
+        <dl class="spec">
+          <dt>Compute</dt><dd>Raspberry Pi 4B ("cyberdeck")</dd>
+          <dt>Drive</dt><dd>L298N dual H-bridge, software pulse-width modulation</dd>
+          <dt>Sensing</dt><dd>3 × RCWL-1601 ultrasonic, per-unit calibration offsets</dd>
+          <dt>Control</dt><dd>avoider.py: slew-rate limiting, dynamic braking, sensor fusion across three channels</dd>
+          <dt>Where it stands</dt><dd>Runs unattended, corner-trap recovery still unsolved</dd>
+        </dl>
+        <p class="entry-links">
+          <a href="#collaborate">Ask about this line</a>
+        </p>
+        </div>
+        <figure class="entry-media">
+          <img src="/Rimdar.png" width="900" height="821" loading="lazy" decoding="async"
+               alt="Line drawing of the R.I.M.D.A.R rover, front view: four-wheel chassis, stacked compute and battery decks, and a forward-facing ultrasonic rangefinder.">
+          <figcaption>R.I.M.D.A.R &mdash; front elevation</figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <!-- ---- entry ---- -->
+    <article class="entry" data-field="infra">
+      <p class="entry-name">Optic Oversight</p>
+      <h2>Reading a city from its public signals</h2>
+      <p class="entry-abstract">
+        A single-pane view of one metro area, assembled only from feeds that are already
+        public: traffic incidents and flow tiles, traffic camera stills, aircraft
+        positions, and radio scanner audio. No private data, no scraping behind a login.
+        It began as an exercise in feed reliability, because most of these sources go
+        down, rate-limit, or silently change shape. It turned into a study of how much
+        situational picture you can assemble from sources nobody is protecting.
+      </p>
+      <p class="question">
+        <span class="tag-line">Open question</span>
+        If this much is assemblable from open feeds by one person in a weekend, what
+        should a city assume about its own signal exhaust?
+      </p>
+      <dl class="spec">
+        <dt>Runtime</dt><dd>Node.js, zero packages, single file</dd>
+        <dt>Sources</dt><dd>TomTom traffic tiles and incidents · camera stills · flight positions · scanner audio</dd>
+        <dt>Method</dt><dd>All third-party feeds proxied server-side to keep credentials off the client</dd>
+        <dt>Why parked</dt><dd>Upstream feed churn outpaced maintenance, waiting on a stable source set</dd>
+        <dt>Where it stands</dt><dd>Runs locally, not published</dd>
+      </dl>
+      <p class="entry-links">
+        <a href="#collaborate">Ask about this line</a>
+      </p>
+    </article>
+
+    <p class="empty" id="empty" hidden>No entries in that field yet.</p>
+  </section>
+
+  <!-- ============ COLLABORATE ============ -->
+  <section class="collab" id="collaborate">
+    <div class="wrap collab-inner">
+      <div>
+        <p class="tag-line">Working together</p>
+        <h2>Bring us a question you can't get a straight answer to.</h2>
+        <p>
+          The Build lab takes on outside problems when they're genuinely open: a system
+          nobody can characterize, a build nobody wants to own, a claim a vendor keeps
+          making that you'd like independently tested. Remote-friendly, with student and
+          community projects welcome.
+        </p>
+        <a class="button" href="https://gridlantis.com">Start a conversation</a>
+      </div>
+      <ul class="contact-list">
+        <li><a href="https://gridlantis.com">Gridlantis.com <span>Contact</span></a></li>
+        <li><a href="https://github.com/Gridlockes" rel="me noopener">github.com/Gridlockes <span>Code</span></a></li>
+        <li><a href="/business">Business solutions <span>Gridlantis</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap colophon">
+  <p class="tag-line">Gridlantis Labs</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ================================================================
+     1. FILTERING
+     ================================================================ */
+  var chips   = Array.prototype.slice.call(document.querySelectorAll(".chip"));
+  var entries = Array.prototype.slice.call(document.querySelectorAll(".entry"));
+  var countEl = document.getElementById("count");
+  var emptyEl = document.getElementById("empty");
+
+  function applyFilter(field) {
+    var shown = 0;
+    entries.forEach(function (entry) {
+      var match = field === "all" || entry.dataset.field === field;
+      entry.hidden = !match;
+      if (match) shown++;
+    });
+    chips.forEach(function (chip) {
+      chip.setAttribute("aria-pressed", String(chip.dataset.filter === field));
+    });
+    countEl.textContent = shown + " shown";
+    emptyEl.hidden = shown !== 0;
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      applyFilter(chip.dataset.filter);
+    });
+  });
+
+  /* ================================================================
+     2. HERO TRACE
+     Two slow sine channels drawn on canvas over the CSS graticule.
+     The top of the frame is erased so the trace never runs through
+     the headline, which leaves the signal rising from the baseline.
+     ================================================================ */
+
+  var canvas = document.querySelector(".hero-canvas");
+  if (!canvas || !canvas.getContext) return;
+
+  var ctx     = canvas.getContext("2d");
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var w = 0, h = 0;
+
+  function wave(t, i) {
+    return 0.5
+      + Math.sin(i * 0.013 + t * 0.22) * 0.22
+      + Math.sin(i * 0.041 - t * 0.35) * 0.13
+      + Math.sin(i * 0.11  + t * 0.6)  * 0.05;
+  }
+
+  function resize() {
+    var dpr  = Math.min(window.devicePixelRatio || 1, 2);
+    var rect = canvas.getBoundingClientRect();
+    w = Math.max(1, Math.round(rect.width));
+    h = Math.max(1, Math.round(rect.height));
+    canvas.width  = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function stroke(t, color, phase, alpha, width) {
+    var padY = h * 0.12;
+    var usable = h - padY * 2;
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth = width;
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    for (var x = 0; x <= w; x += 3) {
+      var v = Math.max(0, Math.min(1, wave(t + phase, x)));
+      var y = h - padY - v * usable;
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, w, h);
+    stroke(t, "#7ea6d4", 2.4, 0.55, 1);
+    stroke(t, "#1f5aa6", 0,   0.55, 1.5);
+
+    // Erase the upper band so the headline sits on clean paper.
+    var fade = ctx.createLinearGradient(0, 0, 0, h);
+    fade.addColorStop(0.00, "rgba(0,0,0,1)");
+    fade.addColorStop(0.62, "rgba(0,0,0,0)");
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.fillStyle = fade;
+    ctx.fillRect(0, 0, w, h);
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  var last = 0;
+  resize();
+
+  var resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () { resize(); draw(last); }, 150);
+  });
+
+  if (reduced) {
+    draw(0);
+  } else {
+    var onScreen = true;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (records) {
+        onScreen = records[0].isIntersecting;
+      }, { rootMargin: "120px" }).observe(canvas);
+    }
+    var prev = 0;
+    (function loop(now) {
+      requestAnimationFrame(loop);
+      if (!onScreen || document.hidden) return;
+      if (now - prev < 42) return;   // ~24 frames per second is plenty for a trace
+      prev = now;
+      last = now / 1000;
+      draw(last);
+    })(0);
+  }
+})();
+</script>
+
+</body>
+</html>

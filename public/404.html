@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Page Not Found — Gridlantis</title>
+    <link rel="icon" href="/gridfav.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" href="/gridfav.png" />
+    <link rel="apple-touch-icon" href="/gridfav-apple.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #0071e3;
+        --text: #1d1d1f;
+        --muted: #6e6e73;
+        --bg: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --text: #f5f5f7;
+          --muted: #a1a1a6;
+          --bg: #000000;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        text-align: center;
+      }
+      .code {
+        font-size: clamp(4rem, 18vw, 9rem);
+        font-weight: 600;
+        line-height: 1;
+        margin: 0;
+        background: linear-gradient(90deg, #00e0ff, #1400ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      h1 { font-size: clamp(1.3rem, 5vw, 2rem); margin: 16px 0 8px; }
+      p { color: var(--muted); margin: 0 0 32px; max-width: 42ch; }
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+      a {
+        display: inline-block;
+        padding: 12px 28px;
+        border-radius: 980px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: opacity 0.2s ease;
+      }
+      a:hover { opacity: 0.85; }
+      a:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; }
+      .primary { background: var(--primary-color); color: #fff; }
+      .secondary { border: 1px solid var(--muted); color: var(--text); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="code">404</p>
+      <h1>We couldn't find that page</h1>
+      <p>
+        The link may be outdated, or the page may have moved. Everything else is
+        still where you left it.
+      </p>
+      <div class="actions">
+        <a class="primary" href="/">Back to home</a>
+        <a class="secondary" href="/#services">Browse services</a>
+      </div>
+    </main>
+  </body>
+</html>

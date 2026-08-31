@@ -1,0 +1,29 @@
+{
+  "name": "gridlantis-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gridlantis Solutions marketing site - static pages served by Express.",
+  "type": "module",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "dev": "node --watch server.js",
+    "doctor": "node scripts/doctor.js",
+    "ports": "node scripts/ports.js",
+    "check:links": "node scripts/check-links.js",
+    "package": "node scripts/package.js",
+    "prepackage": "npm run check:links",
+    "tunnel": "echo 'Start the server first, then: cloudflared tunnel --url http://localhost:<port from npm start>'"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0"
+  },
+  "devDependencies": {
+    "archiver": "^7.0.1"
+  }
+}

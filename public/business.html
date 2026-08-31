@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For business owners | Gridlantis</title>
+<meta name="description" content="Websites, workflow bots and reporting dashboards for small businesses and independent operators.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+<style>
+  :root{
+    --ink:#16151C;
+    --seamless:#E3E5E8;
+    --seamless-deep:#CDD1D7;
+    --key:#FF9E1B;
+    --fill:#5B2BE0;
+    --line:#B4B9C1;
+    --paper:#F6F7F8;
+
+    --display:"Archivo Black", system-ui, sans-serif;
+    --body:"DM Sans", system-ui, sans-serif;
+    --mono:"DM Mono", ui-monospace, monospace;
+
+    --gutter:clamp(20px, 5vw, 72px);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:var(--body);
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 50% 0%, var(--paper) 0%, var(--seamless) 45%, var(--seamless-deep) 100%);
+    background-attachment:fixed;
+    line-height:1.55;
+  }
+  img,svg{max-width:100%;display:block}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--fill); outline-offset:3px}
+
+  .wrap{max-width:1200px;margin-inline:auto;padding-inline:var(--gutter)}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#4A4956;
+    margin:0;
+  }
+
+  .skip{
+    position:absolute;left:-9999px;top:0;z-index:99;
+    background:var(--key);color:var(--ink);
+    font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;
+    padding:12px 18px;text-decoration:none;
+  }
+  .skip:focus{left:0}
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    padding-block:22px;
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  .brand{
+    font-family:var(--display);
+    font-size:1.05rem;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    text-decoration:none;
+  }
+  .masthead nav{display:flex;gap:22px;flex-wrap:wrap;font-family:var(--mono);font-size:.78rem;letter-spacing:.06em}
+  .masthead nav a{text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+  .masthead nav a:hover{border-bottom-color:var(--ink)}
+  .masthead nav a[aria-current="page"]{border-bottom-color:var(--fill)}
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,.95fr);
+    gap:clamp(32px,6vw,80px);
+    align-items:center;
+    padding-block:clamp(48px,9vw,104px);
+  }
+  @media (max-width:900px){ .hero{grid-template-columns:1fr} }
+
+  .hero h1{
+    font-family:var(--display);
+    font-size:clamp(2.4rem, 7.4vw, 5rem);
+    line-height:.94;
+    letter-spacing:-.02em;
+    margin:.35em 0 0;
+    text-transform:uppercase;
+  }
+  .hero h1 .lit{color:var(--fill)}
+  .hero p.lede{
+    max-width:46ch;
+    font-size:clamp(1.02rem,1.9vw,1.22rem);
+    margin:1.4em 0 0;
+    color:#33323D;
+  }
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
+    padding:15px 26px;border-radius:2px;text-decoration:none;border:1px solid var(--ink);
+    background:var(--ink);color:var(--paper);
+    transition:transform .15s ease, background .15s ease, color .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);background:var(--fill);border-color:var(--fill)}
+  .btn--ghost{background:transparent;color:var(--ink)}
+  .btn--ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  /* ---------- signature: the desk monitor ---------- */
+  .rig{display:flex;justify-content:center}
+  .monitor{width:min(500px,92vw);display:flex;flex-direction:column;align-items:center}
+
+  .bezel{
+    width:100%;
+    background:linear-gradient(180deg,#2C2A36 0%,#1D1B26 100%);
+    border-radius:10px;
+    padding:12px 12px 22px;
+    box-shadow:0 40px 70px -30px rgba(22,21,28,.55), inset 0 1px 0 rgba(246,247,248,.09);
+  }
+  .screen{
+    position:relative;overflow:hidden;
+    background:linear-gradient(170deg,#191726 0%,#241F3A 55%,#2C2438 100%);
+    border-radius:3px;
+    min-height:340px;
+    display:flex;flex-direction:column;
+    color:#EDEDF2;
+  }
+  .screen::after{
+    content:"";position:absolute;inset:0;z-index:4;pointer-events:none;
+    background:linear-gradient(112deg, rgba(246,247,248,.09) 0%, rgba(246,247,248,0) 44%);
+  }
+  .glow{position:absolute;width:170px;height:170px;border-radius:50%;filter:blur(46px);z-index:0}
+  .glow.a{background:var(--key);top:-70px;right:-55px;opacity:.42}
+  .glow.b{background:var(--fill);bottom:-60px;left:-60px;opacity:.6}
+
+  .screen-bar{
+    position:relative;z-index:2;
+    display:flex;align-items:center;gap:11px;
+    padding:11px 14px;
+    background:rgba(22,21,28,.4);
+    border-bottom:1px solid rgba(246,247,248,.12);
+  }
+  .dots{display:flex;gap:5px}
+  .dots i{width:8px;height:8px;border-radius:50%;background:rgba(246,247,248,.22)}
+  .dots i:first-child{background:var(--key)}
+  .screen-title{
+    font-family:var(--mono);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(246,247,248,.55);
+  }
+
+  .screen-body{position:relative;z-index:2;display:flex;flex-direction:column;flex:1;padding:20px 18px 22px}
+  .panel-q{
+    font-family:var(--body);font-weight:700;font-size:1rem;
+    margin:0 0 15px;color:#EDEDF2;
+  }
+  .choices{display:grid;gap:8px;margin:0 0 18px}
+  .choice{
+    appearance:none;cursor:pointer;text-align:left;
+    font-family:var(--body);font-size:.88rem;line-height:1.4;
+    background:rgba(246,247,248,.04);color:#EDEDF2;
+    border:1px solid rgba(246,247,248,.24);border-radius:2px;
+    padding:11px 13px;
+    transition:background .18s ease,color .18s ease,border-color .18s ease;
+  }
+  .choice:hover{border-color:var(--key);background:rgba(246,247,248,.08)}
+  .choice[aria-pressed="true"]{background:var(--key);color:var(--ink);border-color:var(--key);font-weight:500}
+  .choice-tag{
+    display:block;font-family:var(--mono);font-size:.6rem;
+    letter-spacing:.14em;text-transform:uppercase;opacity:.62;margin-bottom:5px;
+  }
+  .readout{margin-top:auto;border-top:1px solid rgba(246,247,248,.14);padding-top:15px}
+  .verdict{
+    font-family:var(--display);font-size:1rem;text-transform:uppercase;
+    letter-spacing:-.01em;line-height:1.15;margin:0;
+  }
+  .why{margin:9px 0 0;font-size:.84rem;color:rgba(246,247,248,.72)}
+  .go{
+    display:inline-block;margin-top:13px;
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--key);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;
+  }
+  .go:hover{color:var(--paper)}
+  .go[hidden]{display:none}
+
+  .neck{width:70px;height:26px;background:linear-gradient(180deg,#2C2A36,#1D1B26)}
+  .base{
+    width:190px;height:10px;border-radius:0 0 5px 5px;
+    background:linear-gradient(180deg,#241F3A,#16151C);
+    box-shadow:0 16px 24px -14px rgba(22,21,28,.75);
+  }
+
+  /* ---------- stack strip ---------- */
+  .stack{
+    border-block:1px solid var(--line);
+    padding-block:clamp(38px,6vw,60px);
+  }
+  .stack h2{
+    font-family:var(--display);
+    font-size:clamp(1.3rem,2.6vw,1.9rem);
+    text-transform:uppercase;letter-spacing:-.01em;
+    margin:10px 0 0;
+  }
+  /* the belt itself: two identical runs sliding left, looping on the seam */
+  .belt{
+    margin-top:34px;
+    position:relative;
+    overflow:hidden;
+    border-block:1px solid var(--line);
+    background:var(--paper);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+            mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  }
+  .belt-track{
+    display:flex;
+    width:max-content;
+    animation:belt-roll 38s linear infinite;
+  }
+  .belt:hover .belt-track,
+  .belt:focus-within .belt-track{animation-play-state:paused}
+  @keyframes belt-roll{to{transform:translate3d(-50%,0,0)}}
+
+  .belt-run{
+    display:flex;margin:0;padding:0;list-style:none;
+  }
+  .tool{
+    flex:none;
+    width:190px;
+    padding:24px 20px 26px;
+    display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+    border-right:1px solid var(--line);
+    transition:background .18s ease,color .18s ease;
+  }
+  .tool:hover{background:var(--ink)}
+  .tool:hover .tool-name{color:var(--paper)}
+  .tool-name{
+    font-family:var(--display);font-size:1.02rem;letter-spacing:-.01em;text-transform:uppercase;
+    transition:color .18s ease;
+  }
+  .tool-mark{
+    height:26px;display:flex;align-items:center;
+    font-size:1.45rem;line-height:1;
+  }
+  .tool-mark svg{height:24px;width:auto}
+  /* Instagram's mark is a gradient, so it gets painted through the glyph */
+  .tool-mark .ig{
+    background:linear-gradient(45deg,#F9CE34 5%,#EE2A7B 45%,#6228D7 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  /* the rail underneath — hatch marks travelling with the belt */
+  .belt-rail{
+    height:14px;
+    border-bottom:1px solid var(--line);
+    background:repeating-linear-gradient(
+      135deg,var(--seamless-deep) 0 8px,var(--paper) 8px 16px);
+    animation:belt-rail 1.6s linear infinite;
+  }
+  @keyframes belt-rail{to{background-position:-22.627px 0}}
+  .belt:hover .belt-rail,
+  .belt:focus-within .belt-rail{animation-play-state:paused}
+
+  @media (prefers-reduced-motion:reduce){
+    .belt{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
+    .belt-track,.belt-rail{animation:none}
+  }
+
+  /* ---------- services ---------- */
+  .services{padding-block:clamp(48px,8vw,88px)}
+  .services h2{
+    font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);
+    text-transform:uppercase;letter-spacing:-.015em;margin:10px 0 0;max-width:18ch;
+  }
+  .service-list{
+    margin:38px 0 0;padding:0;list-style:none;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;
+  }
+  .service-list li{border-top:2px solid var(--ink);padding-top:16px}
+  .service-list li.is-lit{border-top-color:var(--fill)}
+  .service-list h3{font-family:var(--body);font-weight:700;font-size:1.05rem;margin:0 0 6px}
+  .service-list p{margin:0 0 12px;color:#43424E;font-size:.95rem}
+  .service-link{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--fill);text-decoration:none;border-bottom:1px solid transparent;
+  }
+  .service-link:hover{border-bottom-color:var(--fill)}
+
+  /* ---------- process ---------- */
+  .process{
+    border-top:1px solid var(--line);
+    padding-block:clamp(48px,8vw,88px);
+  }
+  .process h2{
+    font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);
+    text-transform:uppercase;letter-spacing:-.015em;margin:10px 0 0;max-width:20ch;
+  }
+  .steps{margin:38px 0 0;padding:0;list-style:none;display:grid;gap:0}
+  .step{
+    display:grid;grid-template-columns:auto 1fr;gap:clamp(16px,3vw,38px);
+    padding-block:24px;border-top:1px solid var(--line);
+  }
+  .step:last-child{border-bottom:1px solid var(--line)}
+  .step-n{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--fill);padding-top:5px}
+  .step h3{font-family:var(--body);font-weight:700;font-size:1.05rem;margin:0 0 6px}
+  .step p{margin:0;color:#43424E;font-size:.95rem;max-width:62ch}
+  .step-meta{
+    display:block;margin-top:10px;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5A5966;
+  }
+
+  /* ---------- engagements ---------- */
+  .tiers{
+    border-top:1px solid var(--line);
+    padding-block:clamp(48px,8vw,88px);
+  }
+  .tiers h2{
+    font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);
+    text-transform:uppercase;letter-spacing:-.015em;margin:10px 0 0;max-width:18ch;
+  }
+  .tier-grid{
+    margin-top:38px;display:grid;gap:1px;background:var(--line);
+    border:1px solid var(--line);
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  }
+  .tier{background:var(--paper);padding:28px 22px;display:flex;flex-direction:column;gap:12px}
+  .tier h3{font-family:var(--display);font-size:1.05rem;text-transform:uppercase;letter-spacing:-.01em;margin:0}
+  .tier-price{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fill);margin:0}
+  .tier-note{margin:0;color:#43424E;font-size:.95rem;flex:1}
+  .tier ul{margin:0;padding-left:18px;color:#5A5966;font-size:.88rem;display:grid;gap:5px}
+  .smallprint{margin-top:22px;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;color:#5A5966;max-width:70ch;line-height:1.9}
+
+  /* ---------- faq ---------- */
+  .faq{
+    border-top:1px solid var(--line);
+    padding-block:clamp(48px,8vw,88px);
+  }
+  .faq h2{
+    font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);
+    text-transform:uppercase;letter-spacing:-.015em;margin:10px 0 0;
+  }
+  .faq-list{margin-top:38px;border-top:1px solid var(--line)}
+  .faq-list details{border-bottom:1px solid var(--line)}
+  .faq-list summary{
+    cursor:pointer;padding-block:20px;list-style:none;
+    font-family:var(--body);font-weight:700;font-size:1rem;
+    display:flex;justify-content:space-between;gap:16px;align-items:center;
+  }
+  .faq-list summary::-webkit-details-marker{display:none}
+  .faq-list summary::after{content:"+";font-family:var(--mono);color:var(--fill)}
+  .faq-list details[open] summary::after{content:"–"}
+  .faq-list p{margin:0 0 22px;color:#43424E;font-size:.95rem;max-width:70ch}
+
+  /* ---------- contact ---------- */
+  .contact{
+    background:var(--ink);color:var(--paper);
+    padding-block:clamp(52px,8vw,96px);
+  }
+  .contact .eyebrow{color:var(--key)}
+  .contact-inner{
+    display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+    gap:clamp(32px,6vw,72px);align-items:start;
+  }
+  @media (max-width:860px){ .contact-inner{grid-template-columns:1fr} }
+  .contact h2{
+    font-family:var(--display);font-size:clamp(2rem,5vw,3.2rem);
+    text-transform:uppercase;line-height:.98;letter-spacing:-.02em;margin:10px 0 0;
+  }
+  .contact .lede{color:rgba(246,247,248,.72);max-width:38ch;margin-top:18px}
+  .contact-meta{margin-top:28px;font-family:var(--mono);font-size:.8rem;letter-spacing:.05em;line-height:2}
+  .contact-meta a{color:var(--key)}
+
+  .field{display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+  .field label{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(246,247,248,.66);
+  }
+  .field input,.field select,.field textarea{
+    font-family:var(--body);font-size:1rem;color:var(--paper);
+    background:transparent;border:1px solid rgba(246,247,248,.28);border-radius:2px;
+    padding:13px 14px;
+  }
+  .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--key) 50%),linear-gradient(135deg,var(--key) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
+  .field select option{color:var(--ink)}
+  .field textarea{resize:vertical;min-height:120px}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--key)}
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:520px){ .row-2{grid-template-columns:1fr} }
+  .btn--send{background:var(--key);color:var(--ink);border-color:var(--key);cursor:pointer;font-family:var(--mono)}
+  .btn--send:hover{background:var(--paper);border-color:var(--paper);color:var(--ink)}
+  .form-note{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:rgba(246,247,248,.5);margin-top:14px}
+
+  footer{background:var(--ink);color:rgba(246,247,248,.5);padding-bottom:40px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
+    border-top:1px solid rgba(246,247,248,.14);padding-top:24px;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.06em}
+  footer a{text-decoration:none;border-bottom:1px solid transparent}
+  footer a:hover{color:var(--paper);border-bottom-color:var(--key)}
+  .foot-links{display:flex;gap:18px;flex-wrap:wrap}
+
+  /* Touch targets. These links are inline text, so their box is only as tall
+     as the line (16-28px). On a phone that is well under the 44px a fingertip
+     needs, so pad them out where the pointer is coarse. */
+  @media (max-width: 780px){
+    .masthead nav a,
+    .brand,
+    .service-link,
+    .foot-links a,
+    .contact-meta a{
+      display:inline-flex;
+      align-items:center;
+      min-height:44px;
+    }
+    .masthead nav{ gap:4px 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *{animation:none !important;transition:none !important}
+    .btn:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#services">Skip to content</a>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="index.html">Gridlantis</a>
+    <nav aria-label="Primary">
+      <a href="webdev.html">Web development</a>
+      <a href="bots.html">Bots</a>
+      <a href="dashboards.html">Dashboards</a>
+      <a href="business.html" aria-current="page">For business</a>
+      <a href="#contact">Contact us</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div>
+      <p class="eyebrow">Run the business, not the software</p>
+      <h1>For small<br>business <span class="lit">owners</span></h1>
+      <p class="lede">You shouldn't be rebuilding the same spreadsheet every Sunday night. Gridlantis builds the site, the automation and the reporting, then hands you the keys and stays on call.</p>
+      <div class="cta-row">
+        <a class="btn" href="#contact">Book a call</a>
+        <a class="btn btn--ghost" href="#services">See what we build</a>
+      </div>
+    </div>
+
+    <div class="rig">
+      <div class="monitor">
+        <div class="bezel">
+          <div class="screen">
+            <span class="glow a" aria-hidden="true"></span>
+            <span class="glow b" aria-hidden="true"></span>
+
+            <div class="screen-bar">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="screen-title">gridlantis / diagnostic</span>
+            </div>
+
+            <div class="screen-body">
+              <p class="panel-q" id="panel-q">What's costing you the most time?</p>
+
+              <div class="choices" role="group" aria-labelledby="panel-q">
+                <button type="button" class="choice" data-key="found" aria-pressed="false">
+                  <span class="choice-tag">Input A</span>
+                  People can't find us, or the site makes us look smaller than we are.
+                </button>
+                <button type="button" class="choice" data-key="manual" aria-pressed="false">
+                  <span class="choice-tag">Input B</span>
+                  My team retypes the same things into three places every week.
+                </button>
+                <button type="button" class="choice" data-key="blind" aria-pressed="false">
+                  <span class="choice-tag">Input C</span>
+                  I can't see my numbers without opening five tabs.
+                </button>
+              </div>
+
+              <div class="readout" aria-live="polite">
+                <p class="verdict" id="verdict">Pick an input</p>
+                <p class="why" id="why">Each one points at a different build. The picker just saves you the reading.</p>
+                <a class="go" id="go" href="webdev.html" hidden>See it</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="neck" aria-hidden="true"></span>
+        <span class="base" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="stack" id="stack">
+  <div class="wrap">
+    <p class="eyebrow">Plugs into what you already pay for</p>
+    <h2>Your tools stay your tools</h2>
+  </div>
+  <div class="belt" role="group" aria-label="Tools Gridlantis plugs into">
+    <div class="belt-rail" aria-hidden="true"></div>
+    <div class="belt-track">
+        <ul class="belt-run">
+          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 122.8 122.8" aria-hidden="true" focusable="false"><g fill="#e01e5a"><path d="M25.8 77.6a12.9 12.9 0 1 1-12.9-12.9h12.9zM32.3 77.6a12.9 12.9 0 0 1 25.8 0v32.3a12.9 12.9 0 0 1-25.8 0z"/></g><g fill="#36c5f0"><path d="M45.2 25.8a12.9 12.9 0 1 1 12.9-12.9v12.9zM45.2 32.3a12.9 12.9 0 0 1 0 25.8H12.9a12.9 12.9 0 0 1 0-25.8z"/></g><g fill="#2eb67d"><path d="M97 45.2a12.9 12.9 0 1 1 12.9 12.9H97zM90.5 45.2a12.9 12.9 0 0 1-25.8 0V12.9a12.9 12.9 0 0 1 25.8 0z"/></g><g fill="#ecb22e"><path d="M77.6 97a12.9 12.9 0 1 1-12.9 12.9V97zM77.6 90.5a12.9 12.9 0 0 1 0-25.8h32.3a12.9 12.9 0 0 1 0 25.8z"/></g></svg></span><span class="tool-name" style="color:#4A154B">Slack</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-discord" style="color:#5865F2"></i></span><span class="tool-name" style="color:#4650C4">Discord</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-telegram" style="color:#229ED9"></i></span><span class="tool-name" style="color:#1B7FB3">Telegram</span></li>
+          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 48 36" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M3.3 36h6.5V19.6L0 12.3v20.4C0 34.5 1.5 36 3.3 36z"/><path fill="#34A853" d="M38.2 36h6.5c1.8 0 3.3-1.5 3.3-3.3V12.3l-9.8 7.3z"/><path fill="#FBBC04" d="M38.2 3.3v16.3L48 12.3V4.9c0-4.5-5.2-7.1-8.8-4.4z"/><path fill="#EA4335" d="M9.8 19.6V3.3L24 13.9 38.2 3.3v16.3L24 30.2z"/><path fill="#C5221F" d="M0 4.9v7.4l9.8 7.3V3.3l-1-.7C5.2-2.2 0 .4 0 4.9z"/></svg></span><span class="tool-name" style="color:#C5221F">Gmail</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fas fa-table-cells" style="color:#0F9D58"></i></span><span class="tool-name" style="color:#0F7B47">Google Sheets</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-stripe-s" style="color:#635BFF"></i></span><span class="tool-name" style="color:#4B3FCF">Stripe</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-instagram ig"></i></span><span class="tool-name" style="color:#C13584">Instagram</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-youtube" style="color:#FF0000"></i></span><span class="tool-name" style="color:#C40000">YouTube</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-tiktok" style="color:#010101"></i></span><span class="tool-name" style="color:#010101">TikTok</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-x-twitter" style="color:#010101"></i></span><span class="tool-name" style="color:#010101">X</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-facebook-f" style="color:#1877F2"></i></span><span class="tool-name" style="color:#0B5AC0">Facebook</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-linkedin-in" style="color:#0A66C2"></i></span><span class="tool-name" style="color:#0A66C2">LinkedIn</span></li>
+        </ul>
+        <ul class="belt-run" aria-hidden="true">
+          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 122.8 122.8" aria-hidden="true" focusable="false"><g fill="#e01e5a"><path d="M25.8 77.6a12.9 12.9 0 1 1-12.9-12.9h12.9zM32.3 77.6a12.9 12.9 0 0 1 25.8 0v32.3a12.9 12.9 0 0 1-25.8 0z"/></g><g fill="#36c5f0"><path d="M45.2 25.8a12.9 12.9 0 1 1 12.9-12.9v12.9zM45.2 32.3a12.9 12.9 0 0 1 0 25.8H12.9a12.9 12.9 0 0 1 0-25.8z"/></g><g fill="#2eb67d"><path d="M97 45.2a12.9 12.9 0 1 1 12.9 12.9H97zM90.5 45.2a12.9 12.9 0 0 1-25.8 0V12.9a12.9 12.9 0 0 1 25.8 0z"/></g><g fill="#ecb22e"><path d="M77.6 97a12.9 12.9 0 1 1-12.9 12.9V97zM77.6 90.5a12.9 12.9 0 0 1 0-25.8h32.3a12.9 12.9 0 0 1 0 25.8z"/></g></svg></span><span class="tool-name" style="color:#4A154B">Slack</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-discord" style="color:#5865F2"></i></span><span class="tool-name" style="color:#4650C4">Discord</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-telegram" style="color:#229ED9"></i></span><span class="tool-name" style="color:#1B7FB3">Telegram</span></li>
+          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 48 36" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M3.3 36h6.5V19.6L0 12.3v20.4C0 34.5 1.5 36 3.3 36z"/><path fill="#34A853" d="M38.2 36h6.5c1.8 0 3.3-1.5 3.3-3.3V12.3l-9.8 7.3z"/><path fill="#FBBC04" d="M38.2 3.3v16.3L48 12.3V4.9c0-4.5-5.2-7.1-8.8-4.4z"/><path fill="#EA4335" d="M9.8 19.6V3.3L24 13.9 38.2 3.3v16.3L24 30.2z"/><path fill="#C5221F" d="M0 4.9v7.4l9.8 7.3V3.3l-1-.7C5.2-2.2 0 .4 0 4.9z"/></svg></span><span class="tool-name" style="color:#C5221F">Gmail</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fas fa-table-cells" style="color:#0F9D58"></i></span><span class="tool-name" style="color:#0F7B47">Google Sheets</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-stripe-s" style="color:#635BFF"></i></span><span class="tool-name" style="color:#4B3FCF">Stripe</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-instagram ig"></i></span><span class="tool-name" style="color:#C13584">Instagram</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-youtube" style="color:#FF0000"></i></span><span class="tool-name" style="color:#C40000">YouTube</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-tiktok" style="color:#010101"></i></span><span class="tool-name" style="color:#010101">TikTok</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-x-twitter" style="color:#010101"></i></span><span class="tool-name" style="color:#010101">X</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-facebook-f" style="color:#1877F2"></i></span><span class="tool-name" style="color:#0B5AC0">Facebook</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-linkedin-in" style="color:#0A66C2"></i></span><span class="tool-name" style="color:#0A66C2">LinkedIn</span></li>
+        </ul>
+    </div>
+    <div class="belt-rail" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <p class="eyebrow">What gets built</p>
+    <h2>The parts that eat your week</h2>
+    <ul class="service-list">
+      <li data-cell="found">
+        <h3>Business websites</h3>
+        <p>A site that loads fast, reads clearly on a phone, and tells someone in ten seconds whether you're what they need.</p>
+        <a class="service-link" href="webdev.html">Web development →</a>
+      </li>
+      <li data-cell="manual">
+        <h3>Workflow bots</h3>
+        <p>Slack, Discord or Telegram bots that handle the repetitive part: intake, approvals, reminders and status updates.</p>
+        <a class="service-link" href="bots.html">Bot development →</a>
+      </li>
+      <li data-cell="blind">
+        <h3>Custom dashboards</h3>
+        <p>One screen with the four or five numbers you actually check, pulled from wherever they already live.</p>
+        <a class="service-link" href="dashboards.html">Dashboards →</a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="wrap">
+    <p class="eyebrow">How an engagement runs</p>
+    <h2>You always know what happens next</h2>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-n">01</span>
+        <div>
+          <h3>Call</h3>
+          <p>Thirty minutes. You describe the problem in your own words, no technical vocabulary required. If Gridlantis isn't the right fit, you hear that on the call, not in a proposal three days later.</p>
+          <span class="step-meta">Free · 30 min · no deck</span>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-n">02</span>
+        <div>
+          <h3>Written scope and fixed quote</h3>
+          <p>One page: what gets built, what doesn't, when it lands and what it costs. The price doesn't move unless you change the scope in writing.</p>
+          <span class="step-meta">Within 2 business days</span>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-n">03</span>
+        <div>
+          <h3>Build, with a link you can check</h3>
+          <p>A preview link from day one and a short update at the end of each week. Feedback goes in one place so nothing gets lost in a text thread.</p>
+          <span class="step-meta">Weekly updates</span>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-n">04</span>
+        <div>
+          <h3>Handover</h3>
+          <p>Source files, accounts and a plain-language walkthrough of how to change the things you'll want to change. Nothing stays locked to a Gridlantis account.</p>
+          <span class="step-meta">You own everything</span>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- EDIT PRICING: figures are deliberately absent. Set them against your own time cost before publishing. -->
+<section class="tiers" id="engagements">
+  <div class="wrap">
+    <p class="eyebrow">Ways to work together</p>
+    <h2>Three shapes of engagement</h2>
+    <div class="tier-grid">
+      <div class="tier">
+        <h3>Fixed build</h3>
+        <p class="tier-price">Quoted per project</p>
+        <p class="tier-note">One defined thing, one price, one delivery date. The default for a site, a bot or a dashboard.</p>
+        <ul>
+          <li>Written scope before any work starts</li>
+          <li>Two rounds of revisions included</li>
+          <li>50% up front, 50% on handover</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <h3>Support retainer</h3>
+        <p class="tier-price">Monthly</p>
+        <p class="tier-note">For things that keep running: uptime, small changes, seasonal content, and a human to email when something breaks.</p>
+        <ul>
+          <li>A set block of hours each month</li>
+          <li>Priority on anything that's down</li>
+          <li>Cancel with 30 days' notice</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <h3>Consult only</h3>
+        <p class="tier-price">Hourly</p>
+        <p class="tier-note">You already have a developer or a platform, and you want a second opinion before committing money to it.</p>
+        <ul>
+          <li>Review of an existing build or quote</li>
+          <li>Written recommendation you can act on</li>
+          <li>No obligation to hire for the work</li>
+        </ul>
+      </div>
+    </div>
+    <p class="smallprint">Every quote is written before work begins and doesn't change unless you change what you're asking for. If a project turns out smaller than quoted, you're billed the smaller amount.</p>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <p class="eyebrow">Before you ask</p>
+    <h2>Straight answers</h2>
+    <div class="faq-list">
+      <details>
+        <summary>Do I own the code and the accounts?</summary>
+        <p>Yes. Source files, hosting and any third-party accounts are registered to you or transferred to you at handover. You can hire anyone you like to work on it afterwards.</p>
+      </details>
+      <details>
+        <summary>What if I don't know what I need?</summary>
+        <p>That's normal, and it's what the first call is for. Describe the symptom, "invoices take me all Sunday," and the scope gets written from there.</p>
+      </details>
+      <details>
+        <summary>Can you work with the tools we already use?</summary>
+        <p>Usually. If a tool has a public API (Application Programming Interface, the connection point software vendors expose for other programs), it can generally be wired in. If it doesn't, you'll be told before you're quoted, not after.</p>
+      </details>
+      <details>
+        <summary>How long does a typical build take?</summary>
+        <p>A single landing page is measured in days. A multi-page site or a working bot is usually two to four weeks. A dashboard depends entirely on how tidy the data behind it is, which is something the first call establishes.</p>
+      </details>
+      <details>
+        <summary>What happens if something breaks after handover?</summary>
+        <p>Anything that was broken on delivery gets fixed at no cost. Changes you want later are either covered by a retainer or quoted as a small fixed job.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-inner">
+    <div>
+      <p class="eyebrow">Contact us</p>
+      <h2>Tell us what's<br>slowing you down</h2>
+      <p class="lede">Send one paragraph about the problem. You'll get a real answer back, including "you don't need to pay anyone for this" when that's the honest one.</p>
+      <div class="contact-meta">
+        <a href="mailto:Gridlantis@gmail.com?subject=Business%20enquiry">Gridlantis@gmail.com</a><br>
+        Detroit, MI · Remote worldwide<br>
+        Mon–Fri, 9am–6pm ET
+      </div>
+    </div>
+
+    <form id="contact-form" novalidate>
+      <div class="row-2">
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="company">Business name</label>
+          <input id="company" name="company" type="text" autocomplete="organization" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="need">What do you need built?</label>
+        <select id="need" name="need">
+          <option>A business website</option>
+          <option>A workflow bot</option>
+          <option>A custom dashboard</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="message">What's the problem?</label>
+        <textarea id="message" name="message" placeholder="What you do, what's slow, and what you've already tried."></textarea>
+      </div>
+      <button class="btn btn--send" type="submit">Send message</button>
+      <p class="form-note" id="form-note">Connect this form to an endpoint before launch. It doesn't send anywhere yet.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr">2026</span> Gridlantis</span>
+    <span class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="webdev.html">Web development</a>
+      <a href="bots.html">Bots</a>
+      <a href="dashboards.html">Dashboards</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var ROUTES = {
+    found: {
+      verdict: "You need a business website",
+      why: "Before automation is worth anything, the front door has to work. A fast, clear site usually moves the needle further than anything else on this list.",
+      href: "webdev.html",
+      label: "See web development"
+    },
+    manual: {
+      verdict: "You need a workflow bot",
+      why: "Repeated retyping is the cheapest thing to automate and the easiest to measure. Intake, approvals and reminders can come off your team's plate within a couple of weeks.",
+      href: "bots.html",
+      label: "See bot development"
+    },
+    blind: {
+      verdict: "You need a custom dashboard",
+      why: "One screen, the four or five numbers you actually check, pulled from wherever they already live. Build time depends mostly on how tidy that data is today.",
+      href: "dashboards.html",
+      label: "See dashboards"
+    }
+  };
+
+  var choices = Array.prototype.slice.call(document.querySelectorAll(".choice"));
+  var cells = Array.prototype.slice.call(document.querySelectorAll("[data-cell]"));
+  var verdictEl = document.getElementById("verdict");
+  var whyEl = document.getElementById("why");
+  var goEl = document.getElementById("go");
+
+  function select(key) {
+    var route = ROUTES[key];
+    if (!route) { return; }
+
+    choices.forEach(function (btn) {
+      btn.setAttribute("aria-pressed", String(btn.dataset.key === key));
+    });
+    cells.forEach(function (cell) {
+      cell.classList.toggle("is-lit", cell.dataset.cell === key);
+    });
+
+    verdictEl.textContent = route.verdict;
+    whyEl.textContent = route.why;
+    goEl.href = route.href;
+    goEl.textContent = route.label;
+    goEl.hidden = false;
+  }
+
+  choices.forEach(function (btn) {
+    btn.addEventListener("click", function () { select(btn.dataset.key); });
+  });
+
+  var form = document.getElementById("contact-form");
+  var note = document.getElementById("form-note");
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      note.textContent = "No endpoint connected yet. Email Gridlantis@gmail.com in the meantime.";
+    });
+  }
+
+  var yr = document.getElementById("yr");
+  if (yr) { yr.textContent = String(new Date().getFullYear()); }
+})();
+</script>
+</body>
+</html>
