@@ -124,16 +124,22 @@ const REFR=0.5,HOP=0.075;
 function fire(n,color){
   if(n.refr>0)return;
   n.flash=1;n.refr=REFR;n.color=color;
-  n.out.forEach(e=>{if(Math.random()<0.88)sig.push({e,k:0,acc:0,color,phase:'axon'});});
+  n.out.forEach(e=>{if(Math.random()<0.88)sig.push({e,k:0,u:0,color,phase:'axon'});});
 }
 function seed(){const c=PAL[Math.floor(Math.random()*PAL.length)],c0=nodes.filter(n=>n.col===0&&n.refr<=0);
   if(c0.length)fire(c0[Math.floor(Math.random()*c0.length)],c);}
 function burst(){PAL.forEach((c,i)=>setTimeout(()=>{const c0=nodes.filter(n=>n.col===0);fire(c0[i%c0.length],c);},i*90));}
 function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
-function draw(ts){
-  const dt=Math.min(0.05,(ts-t0)/1000||0.016);t0=ts;
-  ctx.fillStyle='#0B1026';ctx.fillRect(0,0,W,H);
-  amb.forEach(p=>{p.x+=p.s;if(p.x>W)p.x=-4;ctx.globalAlpha=p.a;ctx.fillStyle='#3C5A9A';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.3);ctx.fill();});
+/**
+ * The chip, the axon ribbons with their myelin sheaths and every unlit
+ * dendrite arbor are fixed geometry - close to a thousand ribbon fills that
+ * used to be rebuilt from scratch on every frame. Painting them once into an
+ * offscreen canvas and blitting that is what lets this run at frame rate.
+ */
+const staticCv=document.createElement('canvas');
+let staticDirty=true;
+
+function drawStaticLayer(){
   ctx.globalAlpha=1;ctx.fillStyle='#FFC93D';
   for(let x=140;x<1080;x+=26){ctx.fillRect(x,34,12,16);ctx.fillRect(x,350,12,16);}
   ctx.fillStyle='#15224A';rr(120,50,960,300,16);ctx.fill();
@@ -141,9 +147,8 @@ function draw(ts){
   ctx.fillStyle='#1B2C5C';rr(150,78,900,244,10);ctx.fill();
   ctx.strokeStyle='#33508F';ctx.lineWidth=2;rr(150,78,900,244,10);ctx.stroke();
   ctx.save();rr(150,78,900,244,10);ctx.clip();
-  nodes.forEach(n=>{const lit=n.flash>0.05;
-    ctx.globalAlpha=den*(lit?0.9:0.5);ctx.fillStyle=lit?n.color:DIM;
-    (morph==='swc'?n.swc:n.ls).forEach(segRib);});
+  ctx.globalAlpha=den*0.5;ctx.fillStyle=DIM;
+  nodes.forEach(n=>(morph==='swc'?n.swc:n.ls).forEach(segRib));
   ctx.globalAlpha=1;
   edges.forEach(e=>{
     ctx.fillStyle=IDLE;ribbon(e.p,2.6,1.1);
@@ -153,23 +158,81 @@ function draw(ts){
       ctx.fillStyle=SHEATH;ctx.globalAlpha=0.75;ribbon(seg,4.4,3.4);ctx.globalAlpha=1;}
     const b=e.p[e.p.length-1];ctx.fillStyle=IDLE;ctx.beginPath();ctx.arc(b.x,b.y,4.4,0,6.3);ctx.fill();
     ctx.fillStyle='#22386B';ctx.beginPath();ctx.arc(b.x,b.y,2.2,0,6.3);ctx.fill();});
+  ctx.restore();
+}
+
+function buildStatic(){
+  // Match the live context's device scale so the cached art stays crisp.
+  const q=Math.min(3,Math.max(1,ctx.getTransform().a));
+  staticCv.width=Math.round(W*q);staticCv.height=Math.round(H*q);
+  const sctx=staticCv.getContext('2d');
+  sctx.setTransform(q,0,0,q,0,0);
+  const live=ctx;ctx=sctx;   // ribbon()/rr()/segRib() all paint through `ctx`
+  drawStaticLayer();
+  ctx=live;
+  staticDirty=false;
+}
+
+function draw(ts){
+  const dt=Math.min(0.05,(ts-t0)/1000||0.016);t0=ts;
+  if(staticDirty)buildStatic();
+
+  ctx.fillStyle='#0B1026';ctx.fillRect(0,0,W,H);
+  // dt-scaled so the drift reads the same whether we get 30fps or 144
+  amb.forEach(p=>{p.x+=p.s*dt*60;if(p.x>W)p.x=-4;ctx.globalAlpha=p.a;ctx.fillStyle='#3C5A9A';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.3);ctx.fill();});
+  ctx.globalAlpha=1;
+
+  ctx.drawImage(staticCv,0,0,W,H);
+
+  ctx.save();rr(150,78,900,244,10);ctx.clip();
+
+  // only arbors that are actually firing get redrawn; the rest are in the blit
+  nodes.forEach(n=>{
+    if(n.flash<=0.05)return;
+    ctx.globalAlpha=den*0.9;ctx.fillStyle=n.color;
+    (morph==='swc'?n.swc:n.ls).forEach(segRib);});
+  ctx.globalAlpha=1;
+
   {
-    sig.forEach(s=>{s.acc+=dt;
-      const step=myelin?HOP:HOP*0.55;
-      while(s.acc>=step&&s.phase==='axon'){s.acc-=step;
+    const step=myelin?HOP:HOP*0.55;
+    sig.forEach(s=>{
+      // Advance continuously along the axon rather than one node per tick, so
+      // the spike glides instead of stuttering between nodes of Ranvier.
+      const span=Math.max(1,s.e.ran.length-1);
+      s.u+=dt/(step*span);
+      while(s.k<s.e.ran.length&&s.u>=s.e.ran[s.k]){
         const pt=pointAt(s.e,s.e.ran[s.k]);
         sparks.push({x:pt.x,y:pt.y,a:1,c:s.color});
-        s.k++;
-        if(s.k>=s.e.ran.length){s.phase='cleft';
-          const tp=s.e.p[s.e.p.length-1],tg=s.e.b;
-          for(let v=0;v<7;v++)ves.push({x:tp.x,y:tp.y,tx:tg.x+(rnd()*10-5),ty:tg.y+(rnd()*10-5),t:0,sp:2.6+rnd(),c:s.color,tgt:tg});
-        }}});
-    sig=sig.filter(s=>s.phase==='axon');
+        s.k++;}
+      if(s.u>=1&&s.phase==='axon'){
+        s.phase='cleft';
+        const tp=s.e.p[s.e.p.length-1],tg=s.e.b;
+        for(let v=0;v<7;v++)ves.push({x:tp.x,y:tp.y,tx:tg.x+(rnd()*10-5),ty:tg.y+(rnd()*10-5),t:0,sp:2.6+rnd(),c:s.color,tgt:tg});
+      }});
     ves.forEach(v=>{v.t=Math.min(1,v.t+dt*v.sp);if(v.t>=1&&!v.done){v.done=true;fire(v.tgt,v.c);}});
     ves=ves.filter(v=>v.t<1);
     sparks.forEach(s=>s.a-=dt*3.2);sparks=sparks.filter(s=>s.a>0);
     nodes.forEach(n=>{n.refr=Math.max(0,n.refr-dt);n.flash=Math.max(0,n.flash-dt*1.5);});
   }
+
+  // The travelling action potential: a head with a short fading tail. This is
+  // the part that carries the eye between nodes.
+  sig.forEach(s=>{
+    const head=Math.min(1,s.u);
+    for(let i=4;i>=1;i--){
+      const u=head-i*0.018;
+      if(u<0)continue;
+      const pt=pointAt(s.e,u),f=1-i/5;
+      ctx.globalAlpha=0.5*f*f;ctx.fillStyle=s.color;
+      ctx.beginPath();ctx.arc(pt.x,pt.y,1.6+2.6*f,0,6.3);ctx.fill();}
+    const pt=pointAt(s.e,head);
+    ctx.globalAlpha=0.22;ctx.fillStyle=s.color;
+    ctx.beginPath();ctx.arc(pt.x,pt.y,9,0,6.3);ctx.fill();
+    ctx.globalAlpha=0.9;
+    ctx.beginPath();ctx.arc(pt.x,pt.y,3.2,0,6.3);ctx.fill();});
+  sig=sig.filter(s=>s.phase==='axon');
+  ctx.globalAlpha=1;
+
   sparks.forEach(s=>{ctx.globalAlpha=s.a*0.9;ctx.fillStyle=s.c;
     ctx.beginPath();ctx.arc(s.x,s.y,5.2*s.a+1.4,0,6.3);ctx.fill();
     ctx.globalAlpha=s.a*0.25;ctx.beginPath();ctx.arc(s.x,s.y,13*(1-s.a)+4,0,6.3);ctx.fill();});
@@ -193,7 +256,8 @@ function draw(ts){
     ctx.fillStyle=n.flash>0.05?'#0B1026':'#22386B';
     ctx.beginPath();ctx.arc(n.x,n.y,3.4,0,6.3);ctx.fill();});
   ctx.restore();ctx.globalAlpha=1;
-  if(Math.random()<0.035)seed();
+  // frame-rate independent: same ~0.9 seeds a second at any refresh rate
+  if(Math.random()<1-Math.pow(1-0.035,dt*60))seed();
 }
   function frame(ts){
     if(!running) return;
@@ -210,6 +274,7 @@ function draw(ts){
 
   const teardownResize = onResize(cv, (newCtx) => {
     ctx = newCtx;
+    staticDirty = true;   // the cache is rendered at the old device scale
     if (!running) paintStatic();
   });
 
@@ -230,9 +295,9 @@ function draw(ts){
     },
     destroy(){ this.stop(); teardownResize(); },
     burst,
-    setArbor(v){ den = v; },
-    setMyelin(v){ myelin = v; },
-    setMorphology(v){ morph = v; },
+    setArbor(v){ den = v; staticDirty = true; },
+    setMyelin(v){ myelin = v; staticDirty = true; },
+    setMorphology(v){ morph = v; staticDirty = true; },
     paintStatic,
   };
 }

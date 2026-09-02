@@ -142,7 +142,6 @@ a{ color: inherit; }
     min-height: 44px;
   }
   .contact-list a{ padding-block: 0.85rem; min-height: 44px; align-items: center; }
-  .entry-links a{ min-height: 44px; display: inline-flex; align-items: center; }
 }
 
 /* ---------- hero ---------- */
@@ -343,28 +342,6 @@ a{ color: inherit; }
 @media (max-width: 520px){
   .spec{ grid-template-columns: 1fr; }
   .spec dt{ border-bottom: 0; padding-bottom: 0.15rem; }
-}
-
-.entry-links{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 1.5rem;
-}
-.entry-links a{
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--ink);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  padding: 7px 12px;
-}
-.entry-links a:hover{
-  border-color: var(--signal);
-  color: var(--signal);
 }
 
 /* ---------- entry media ---------- */
@@ -576,9 +553,6 @@ a{ color: inherit; }
           <dt>Next step</dt><dd>Shuffled-connectome control run with the same degree distribution and randomized edges</dd>
           <dt>Where it stands</dt><dd>Coupling verified, baseline gait not yet characterized</dd>
         </dl>
-        <p class="entry-links">
-          <a href="#collaborate">Ask about this line</a>
-        </p>
         </div>
         <figure class="entry-media">
           <img src="/flybrain_neurons_pic.webp" width="1621" height="855" loading="lazy" decoding="async"
@@ -615,9 +589,6 @@ a{ color: inherit; }
           <dt>Control</dt><dd>avoider.py: slew-rate limiting, dynamic braking, sensor fusion across three channels</dd>
           <dt>Where it stands</dt><dd>Runs unattended, corner-trap recovery still unsolved</dd>
         </dl>
-        <p class="entry-links">
-          <a href="#collaborate">Ask about this line</a>
-        </p>
         </div>
         <figure class="entry-media">
           <img src="/Rimdar.png" width="900" height="821" loading="lazy" decoding="async"
@@ -651,9 +622,6 @@ a{ color: inherit; }
         <dt>Why parked</dt><dd>Upstream feed churn outpaced maintenance, waiting on a stable source set</dd>
         <dt>Where it stands</dt><dd>Runs locally, not published</dd>
       </dl>
-      <p class="entry-links">
-        <a href="#collaborate">Ask about this line</a>
-      </p>
     </article>
 
     <p class="empty" id="empty" hidden>No entries in that field yet.</p>

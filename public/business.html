@@ -4,20 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>For business owners | Gridlantis</title>
-<meta name="description" content="Websites, workflow bots and reporting dashboards for small businesses and independent operators.">
+<meta name="description" content="Websites, workflow bots and reporting dashboards for businesses of every size and independent operators.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
   :root{
-    --ink:#16151C;
-    --seamless:#E3E5E8;
-    --seamless-deep:#CDD1D7;
+    /* Dark page. --ink stays the primary foreground and --paper the raised
+       surface behind it; --ink-deep is the near-black used for text that sits
+       ON a light or key-coloured fill (buttons, pressed states, badges). */
+    --ink:#F2F2F6;
+    --ink-deep:#08080B;
+    --muted:#A7A6B4;
+    --muted-2:#8B8A99;
+    --seamless:#0C0C11;
+    --seamless-deep:#000000;
     --key:#FF9E1B;
-    --fill:#5B2BE0;
-    --line:#B4B9C1;
-    --paper:#F6F7F8;
+    --fill:#9B7BFF;
+    --line:#2B2B36;
+    --paper:#14141A;
 
     --display:"Archivo Black", system-ui, sans-serif;
     --body:"DM Sans", system-ui, sans-serif;
@@ -33,7 +39,7 @@
     font-family:var(--body);
     color:var(--ink);
     background:
-      radial-gradient(120% 80% at 50% 0%, var(--paper) 0%, var(--seamless) 45%, var(--seamless-deep) 100%);
+      radial-gradient(120% 80% at 50% 0%, #17171F 0%, var(--seamless) 45%, var(--seamless-deep) 100%);
     background-attachment:fixed;
     line-height:1.55;
   }
@@ -48,13 +54,13 @@
     font-size:.72rem;
     letter-spacing:.18em;
     text-transform:uppercase;
-    color:#4A4956;
+    color:var(--muted);
     margin:0;
   }
 
   .skip{
     position:absolute;left:-9999px;top:0;z-index:99;
-    background:var(--key);color:var(--ink);
+    background:var(--key);color:var(--ink-deep);
     font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;
     padding:12px 18px;text-decoration:none;
   }
@@ -102,19 +108,19 @@
     max-width:46ch;
     font-size:clamp(1.02rem,1.9vw,1.22rem);
     margin:1.4em 0 0;
-    color:#33323D;
+    color:var(--muted);
   }
   .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
   .btn{
     display:inline-flex;align-items:center;gap:10px;
     font-family:var(--mono);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
     padding:15px 26px;border-radius:2px;text-decoration:none;border:1px solid var(--ink);
-    background:var(--ink);color:var(--paper);
+    background:var(--ink);color:var(--ink-deep);
     transition:transform .15s ease, background .15s ease, color .15s ease;
   }
   .btn:hover{transform:translateY(-2px);background:var(--fill);border-color:var(--fill)}
   .btn--ghost{background:transparent;color:var(--ink)}
-  .btn--ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .btn--ghost:hover{background:var(--ink);color:var(--ink-deep);border-color:var(--ink)}
 
   /* ---------- signature: the desk monitor ---------- */
   .rig{display:flex;justify-content:center}
@@ -125,7 +131,7 @@
     background:linear-gradient(180deg,#2C2A36 0%,#1D1B26 100%);
     border-radius:10px;
     padding:12px 12px 22px;
-    box-shadow:0 40px 70px -30px rgba(22,21,28,.55), inset 0 1px 0 rgba(246,247,248,.09);
+    box-shadow:0 40px 70px -30px rgba(0,0,0,.75), inset 0 1px 0 rgba(246,247,248,.09);
   }
   .screen{
     position:relative;overflow:hidden;
@@ -147,7 +153,7 @@
     position:relative;z-index:2;
     display:flex;align-items:center;gap:11px;
     padding:11px 14px;
-    background:rgba(22,21,28,.4);
+    background:rgba(0,0,0,.45);
     border-bottom:1px solid rgba(246,247,248,.12);
   }
   .dots{display:flex;gap:5px}
@@ -173,7 +179,7 @@
     transition:background .18s ease,color .18s ease,border-color .18s ease;
   }
   .choice:hover{border-color:var(--key);background:rgba(246,247,248,.08)}
-  .choice[aria-pressed="true"]{background:var(--key);color:var(--ink);border-color:var(--key);font-weight:500}
+  .choice[aria-pressed="true"]{background:var(--key);color:var(--ink-deep);border-color:var(--key);font-weight:500}
   .choice-tag{
     display:block;font-family:var(--mono);font-size:.6rem;
     letter-spacing:.14em;text-transform:uppercase;opacity:.62;margin-bottom:5px;
@@ -189,14 +195,14 @@
     font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
     color:var(--key);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;
   }
-  .go:hover{color:var(--paper)}
+  .go:hover{color:var(--ink)}
   .go[hidden]{display:none}
 
   .neck{width:70px;height:26px;background:linear-gradient(180deg,#2C2A36,#1D1B26)}
   .base{
     width:190px;height:10px;border-radius:0 0 5px 5px;
     background:linear-gradient(180deg,#241F3A,#16151C);
-    box-shadow:0 16px 24px -14px rgba(22,21,28,.75);
+    box-shadow:0 16px 24px -14px rgba(0,0,0,.85);
   }
 
   /* ---------- stack strip ---------- */
@@ -241,7 +247,7 @@
     transition:background .18s ease,color .18s ease;
   }
   .tool:hover{background:var(--ink)}
-  .tool:hover .tool-name{color:var(--paper)}
+  .tool:hover .tool-name{color:var(--ink-deep)}
   .tool-name{
     font-family:var(--display);font-size:1.02rem;letter-spacing:-.01em;text-transform:uppercase;
     transition:color .18s ease;
@@ -262,7 +268,7 @@
     height:14px;
     border-bottom:1px solid var(--line);
     background:repeating-linear-gradient(
-      135deg,var(--seamless-deep) 0 8px,var(--paper) 8px 16px);
+      135deg,#1E1E27 0 8px,var(--paper) 8px 16px);
     animation:belt-rail 1.6s linear infinite;
   }
   @keyframes belt-rail{to{background-position:-22.627px 0}}
@@ -284,10 +290,10 @@
     margin:38px 0 0;padding:0;list-style:none;
     display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px;
   }
-  .service-list li{border-top:2px solid var(--ink);padding-top:16px}
+  .service-list li{border-top:2px solid var(--line);padding-top:16px}
   .service-list li.is-lit{border-top-color:var(--fill)}
   .service-list h3{font-family:var(--body);font-weight:700;font-size:1.05rem;margin:0 0 6px}
-  .service-list p{margin:0 0 12px;color:#43424E;font-size:.95rem}
+  .service-list p{margin:0 0 12px;color:var(--muted);font-size:.95rem}
   .service-link{
     font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
     color:var(--fill);text-decoration:none;border-bottom:1px solid transparent;
@@ -311,10 +317,10 @@
   .step:last-child{border-bottom:1px solid var(--line)}
   .step-n{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--fill);padding-top:5px}
   .step h3{font-family:var(--body);font-weight:700;font-size:1.05rem;margin:0 0 6px}
-  .step p{margin:0;color:#43424E;font-size:.95rem;max-width:62ch}
+  .step p{margin:0;color:var(--muted);font-size:.95rem;max-width:62ch}
   .step-meta{
     display:block;margin-top:10px;
-    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5A5966;
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);
   }
 
   /* ---------- engagements ---------- */
@@ -334,9 +340,9 @@
   .tier{background:var(--paper);padding:28px 22px;display:flex;flex-direction:column;gap:12px}
   .tier h3{font-family:var(--display);font-size:1.05rem;text-transform:uppercase;letter-spacing:-.01em;margin:0}
   .tier-price{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fill);margin:0}
-  .tier-note{margin:0;color:#43424E;font-size:.95rem;flex:1}
-  .tier ul{margin:0;padding-left:18px;color:#5A5966;font-size:.88rem;display:grid;gap:5px}
-  .smallprint{margin-top:22px;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;color:#5A5966;max-width:70ch;line-height:1.9}
+  .tier-note{margin:0;color:var(--muted);font-size:.95rem;flex:1}
+  .tier ul{margin:0;padding-left:18px;color:var(--muted-2);font-size:.88rem;display:grid;gap:5px}
+  .smallprint{margin-top:22px;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;color:var(--muted-2);max-width:70ch;line-height:1.9}
 
   /* ---------- faq ---------- */
   .faq{
@@ -357,11 +363,12 @@
   .faq-list summary::-webkit-details-marker{display:none}
   .faq-list summary::after{content:"+";font-family:var(--mono);color:var(--fill)}
   .faq-list details[open] summary::after{content:"–"}
-  .faq-list p{margin:0 0 22px;color:#43424E;font-size:.95rem;max-width:70ch}
+  .faq-list p{margin:0 0 22px;color:var(--muted);font-size:.95rem;max-width:70ch}
 
   /* ---------- contact ---------- */
   .contact{
-    background:var(--ink);color:var(--paper);
+    background:var(--paper);color:var(--ink);
+    border-top:1px solid var(--line);
     padding-block:clamp(52px,8vw,96px);
   }
   .contact .eyebrow{color:var(--key)}
@@ -384,26 +391,26 @@
     color:rgba(246,247,248,.66);
   }
   .field input,.field select,.field textarea{
-    font-family:var(--body);font-size:1rem;color:var(--paper);
+    font-family:var(--body);font-size:1rem;color:var(--ink);
     background:transparent;border:1px solid rgba(246,247,248,.28);border-radius:2px;
     padding:13px 14px;
   }
   .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--key) 50%),linear-gradient(135deg,var(--key) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
-  .field select option{color:var(--ink)}
+  .field select option{color:var(--ink-deep)}
   .field textarea{resize:vertical;min-height:120px}
   .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--key)}
   .row-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media (max-width:520px){ .row-2{grid-template-columns:1fr} }
-  .btn--send{background:var(--key);color:var(--ink);border-color:var(--key);cursor:pointer;font-family:var(--mono)}
-  .btn--send:hover{background:var(--paper);border-color:var(--paper);color:var(--ink)}
+  .btn--send{background:var(--key);color:var(--ink-deep);border-color:var(--key);cursor:pointer;font-family:var(--mono)}
+  .btn--send:hover{background:var(--ink);border-color:var(--ink);color:var(--ink-deep)}
   .form-note{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:rgba(246,247,248,.5);margin-top:14px}
 
-  footer{background:var(--ink);color:rgba(246,247,248,.5);padding-bottom:40px}
+  footer{background:var(--paper);color:var(--muted-2);padding-bottom:40px}
   footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
     border-top:1px solid rgba(246,247,248,.14);padding-top:24px;
     font-family:var(--mono);font-size:.72rem;letter-spacing:.06em}
   footer a{text-decoration:none;border-bottom:1px solid transparent}
-  footer a:hover{color:var(--paper);border-bottom-color:var(--key)}
+  footer a:hover{color:var(--ink);border-bottom-color:var(--key)}
   .foot-links{display:flex;gap:18px;flex-wrap:wrap}
 
   /* Touch targets. These links are inline text, so their box is only as tall
@@ -446,7 +453,7 @@
   <section class="hero" id="top">
     <div>
       <p class="eyebrow">Run the business, not the software</p>
-      <h1>For small<br>business <span class="lit">owners</span></h1>
+      <h1>For all<br>business <span class="lit">owners</span></h1>
       <p class="lede">You shouldn't be rebuilding the same spreadsheet every Sunday night. Gridlantis builds the site, the automation and the reporting, then hands you the keys and stays on call.</p>
       <div class="cta-row">
         <a class="btn" href="#contact">Book a call</a>
@@ -508,32 +515,32 @@
     <div class="belt-rail" aria-hidden="true"></div>
     <div class="belt-track">
         <ul class="belt-run">
-          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 122.8 122.8" aria-hidden="true" focusable="false"><g fill="#e01e5a"><path d="M25.8 77.6a12.9 12.9 0 1 1-12.9-12.9h12.9zM32.3 77.6a12.9 12.9 0 0 1 25.8 0v32.3a12.9 12.9 0 0 1-25.8 0z"/></g><g fill="#36c5f0"><path d="M45.2 25.8a12.9 12.9 0 1 1 12.9-12.9v12.9zM45.2 32.3a12.9 12.9 0 0 1 0 25.8H12.9a12.9 12.9 0 0 1 0-25.8z"/></g><g fill="#2eb67d"><path d="M97 45.2a12.9 12.9 0 1 1 12.9 12.9H97zM90.5 45.2a12.9 12.9 0 0 1-25.8 0V12.9a12.9 12.9 0 0 1 25.8 0z"/></g><g fill="#ecb22e"><path d="M77.6 97a12.9 12.9 0 1 1-12.9 12.9V97zM77.6 90.5a12.9 12.9 0 0 1 0-25.8h32.3a12.9 12.9 0 0 1 0 25.8z"/></g></svg></span><span class="tool-name" style="color:#4A154B">Slack</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-discord" style="color:#5865F2"></i></span><span class="tool-name" style="color:#4650C4">Discord</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-telegram" style="color:#229ED9"></i></span><span class="tool-name" style="color:#1B7FB3">Telegram</span></li>
-          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 48 36" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M3.3 36h6.5V19.6L0 12.3v20.4C0 34.5 1.5 36 3.3 36z"/><path fill="#34A853" d="M38.2 36h6.5c1.8 0 3.3-1.5 3.3-3.3V12.3l-9.8 7.3z"/><path fill="#FBBC04" d="M38.2 3.3v16.3L48 12.3V4.9c0-4.5-5.2-7.1-8.8-4.4z"/><path fill="#EA4335" d="M9.8 19.6V3.3L24 13.9 38.2 3.3v16.3L24 30.2z"/><path fill="#C5221F" d="M0 4.9v7.4l9.8 7.3V3.3l-1-.7C5.2-2.2 0 .4 0 4.9z"/></svg></span><span class="tool-name" style="color:#C5221F">Gmail</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fas fa-table-cells" style="color:#0F9D58"></i></span><span class="tool-name" style="color:#0F7B47">Google Sheets</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-stripe-s" style="color:#635BFF"></i></span><span class="tool-name" style="color:#4B3FCF">Stripe</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-instagram ig"></i></span><span class="tool-name" style="color:#C13584">Instagram</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-youtube" style="color:#FF0000"></i></span><span class="tool-name" style="color:#C40000">YouTube</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-tiktok" style="color:#010101"></i></span><span class="tool-name" style="color:#010101">TikTok</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-x-twitter" style="color:#010101"></i></span><span class="tool-name" style="color:#010101">X</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-facebook-f" style="color:#1877F2"></i></span><span class="tool-name" style="color:#0B5AC0">Facebook</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-linkedin-in" style="color:#0A66C2"></i></span><span class="tool-name" style="color:#0A66C2">LinkedIn</span></li>
+          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 122.8 122.8" aria-hidden="true" focusable="false"><g fill="#e01e5a"><path d="M25.8 77.6a12.9 12.9 0 1 1-12.9-12.9h12.9zM32.3 77.6a12.9 12.9 0 0 1 25.8 0v32.3a12.9 12.9 0 0 1-25.8 0z"/></g><g fill="#36c5f0"><path d="M45.2 25.8a12.9 12.9 0 1 1 12.9-12.9v12.9zM45.2 32.3a12.9 12.9 0 0 1 0 25.8H12.9a12.9 12.9 0 0 1 0-25.8z"/></g><g fill="#2eb67d"><path d="M97 45.2a12.9 12.9 0 1 1 12.9 12.9H97zM90.5 45.2a12.9 12.9 0 0 1-25.8 0V12.9a12.9 12.9 0 0 1 25.8 0z"/></g><g fill="#ecb22e"><path d="M77.6 97a12.9 12.9 0 1 1-12.9 12.9V97zM77.6 90.5a12.9 12.9 0 0 1 0-25.8h32.3a12.9 12.9 0 0 1 0 25.8z"/></g></svg></span><span class="tool-name">Slack</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-discord" style="color:#5865F2"></i></span><span class="tool-name">Discord</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-telegram" style="color:#229ED9"></i></span><span class="tool-name">Telegram</span></li>
+          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 48 36" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M3.3 36h6.5V19.6L0 12.3v20.4C0 34.5 1.5 36 3.3 36z"/><path fill="#34A853" d="M38.2 36h6.5c1.8 0 3.3-1.5 3.3-3.3V12.3l-9.8 7.3z"/><path fill="#FBBC04" d="M38.2 3.3v16.3L48 12.3V4.9c0-4.5-5.2-7.1-8.8-4.4z"/><path fill="#EA4335" d="M9.8 19.6V3.3L24 13.9 38.2 3.3v16.3L24 30.2z"/><path fill="#C5221F" d="M0 4.9v7.4l9.8 7.3V3.3l-1-.7C5.2-2.2 0 .4 0 4.9z"/></svg></span><span class="tool-name">Gmail</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fas fa-table-cells" style="color:#0F9D58"></i></span><span class="tool-name">Google Sheets</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-stripe-s" style="color:#635BFF"></i></span><span class="tool-name">Stripe</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-instagram ig"></i></span><span class="tool-name">Instagram</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-youtube" style="color:#FF0000"></i></span><span class="tool-name">YouTube</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-tiktok" style="color:#F2F2F6"></i></span><span class="tool-name">TikTok</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-x-twitter" style="color:#F2F2F6"></i></span><span class="tool-name">X</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-facebook-f" style="color:#1877F2"></i></span><span class="tool-name">Facebook</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-linkedin-in" style="color:#0A66C2"></i></span><span class="tool-name">LinkedIn</span></li>
         </ul>
         <ul class="belt-run" aria-hidden="true">
-          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 122.8 122.8" aria-hidden="true" focusable="false"><g fill="#e01e5a"><path d="M25.8 77.6a12.9 12.9 0 1 1-12.9-12.9h12.9zM32.3 77.6a12.9 12.9 0 0 1 25.8 0v32.3a12.9 12.9 0 0 1-25.8 0z"/></g><g fill="#36c5f0"><path d="M45.2 25.8a12.9 12.9 0 1 1 12.9-12.9v12.9zM45.2 32.3a12.9 12.9 0 0 1 0 25.8H12.9a12.9 12.9 0 0 1 0-25.8z"/></g><g fill="#2eb67d"><path d="M97 45.2a12.9 12.9 0 1 1 12.9 12.9H97zM90.5 45.2a12.9 12.9 0 0 1-25.8 0V12.9a12.9 12.9 0 0 1 25.8 0z"/></g><g fill="#ecb22e"><path d="M77.6 97a12.9 12.9 0 1 1-12.9 12.9V97zM77.6 90.5a12.9 12.9 0 0 1 0-25.8h32.3a12.9 12.9 0 0 1 0 25.8z"/></g></svg></span><span class="tool-name" style="color:#4A154B">Slack</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-discord" style="color:#5865F2"></i></span><span class="tool-name" style="color:#4650C4">Discord</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-telegram" style="color:#229ED9"></i></span><span class="tool-name" style="color:#1B7FB3">Telegram</span></li>
-          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 48 36" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M3.3 36h6.5V19.6L0 12.3v20.4C0 34.5 1.5 36 3.3 36z"/><path fill="#34A853" d="M38.2 36h6.5c1.8 0 3.3-1.5 3.3-3.3V12.3l-9.8 7.3z"/><path fill="#FBBC04" d="M38.2 3.3v16.3L48 12.3V4.9c0-4.5-5.2-7.1-8.8-4.4z"/><path fill="#EA4335" d="M9.8 19.6V3.3L24 13.9 38.2 3.3v16.3L24 30.2z"/><path fill="#C5221F" d="M0 4.9v7.4l9.8 7.3V3.3l-1-.7C5.2-2.2 0 .4 0 4.9z"/></svg></span><span class="tool-name" style="color:#C5221F">Gmail</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fas fa-table-cells" style="color:#0F9D58"></i></span><span class="tool-name" style="color:#0F7B47">Google Sheets</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-stripe-s" style="color:#635BFF"></i></span><span class="tool-name" style="color:#4B3FCF">Stripe</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-instagram ig"></i></span><span class="tool-name" style="color:#C13584">Instagram</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-youtube" style="color:#FF0000"></i></span><span class="tool-name" style="color:#C40000">YouTube</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-tiktok" style="color:#010101"></i></span><span class="tool-name" style="color:#010101">TikTok</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-x-twitter" style="color:#010101"></i></span><span class="tool-name" style="color:#010101">X</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-facebook-f" style="color:#1877F2"></i></span><span class="tool-name" style="color:#0B5AC0">Facebook</span></li>
-          <li class="tool"><span class="tool-mark"><i class="fab fa-linkedin-in" style="color:#0A66C2"></i></span><span class="tool-name" style="color:#0A66C2">LinkedIn</span></li>
+          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 122.8 122.8" aria-hidden="true" focusable="false"><g fill="#e01e5a"><path d="M25.8 77.6a12.9 12.9 0 1 1-12.9-12.9h12.9zM32.3 77.6a12.9 12.9 0 0 1 25.8 0v32.3a12.9 12.9 0 0 1-25.8 0z"/></g><g fill="#36c5f0"><path d="M45.2 25.8a12.9 12.9 0 1 1 12.9-12.9v12.9zM45.2 32.3a12.9 12.9 0 0 1 0 25.8H12.9a12.9 12.9 0 0 1 0-25.8z"/></g><g fill="#2eb67d"><path d="M97 45.2a12.9 12.9 0 1 1 12.9 12.9H97zM90.5 45.2a12.9 12.9 0 0 1-25.8 0V12.9a12.9 12.9 0 0 1 25.8 0z"/></g><g fill="#ecb22e"><path d="M77.6 97a12.9 12.9 0 1 1-12.9 12.9V97zM77.6 90.5a12.9 12.9 0 0 1 0-25.8h32.3a12.9 12.9 0 0 1 0 25.8z"/></g></svg></span><span class="tool-name">Slack</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-discord" style="color:#5865F2"></i></span><span class="tool-name">Discord</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-telegram" style="color:#229ED9"></i></span><span class="tool-name">Telegram</span></li>
+          <li class="tool"><span class="tool-mark"><svg viewBox="0 0 48 36" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M3.3 36h6.5V19.6L0 12.3v20.4C0 34.5 1.5 36 3.3 36z"/><path fill="#34A853" d="M38.2 36h6.5c1.8 0 3.3-1.5 3.3-3.3V12.3l-9.8 7.3z"/><path fill="#FBBC04" d="M38.2 3.3v16.3L48 12.3V4.9c0-4.5-5.2-7.1-8.8-4.4z"/><path fill="#EA4335" d="M9.8 19.6V3.3L24 13.9 38.2 3.3v16.3L24 30.2z"/><path fill="#C5221F" d="M0 4.9v7.4l9.8 7.3V3.3l-1-.7C5.2-2.2 0 .4 0 4.9z"/></svg></span><span class="tool-name">Gmail</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fas fa-table-cells" style="color:#0F9D58"></i></span><span class="tool-name">Google Sheets</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-stripe-s" style="color:#635BFF"></i></span><span class="tool-name">Stripe</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-instagram ig"></i></span><span class="tool-name">Instagram</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-youtube" style="color:#FF0000"></i></span><span class="tool-name">YouTube</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-tiktok" style="color:#F2F2F6"></i></span><span class="tool-name">TikTok</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-x-twitter" style="color:#F2F2F6"></i></span><span class="tool-name">X</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-facebook-f" style="color:#1877F2"></i></span><span class="tool-name">Facebook</span></li>
+          <li class="tool"><span class="tool-mark"><i class="fab fa-linkedin-in" style="color:#0A66C2"></i></span><span class="tool-name">LinkedIn</span></li>
         </ul>
     </div>
     <div class="belt-rail" aria-hidden="true"></div>
