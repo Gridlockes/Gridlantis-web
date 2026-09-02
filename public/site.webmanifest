@@ -1,7 +1,7 @@
 {
   "name": "Gridlantis",
   "short_name": "Gridlantis",
-  "description": "Custom websites, Discord bots, dashboards, and pixel cards built to order.",
+  "description": "Custom websites, Discord bots, and dashboards built to order.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

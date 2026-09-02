@@ -437,9 +437,7 @@
   <header class="masthead">
     <a class="brand" href="index.html">Gridlantis</a>
     <nav aria-label="Primary">
-      <a href="webdev.html">Web development</a>
-      <a href="bots.html">Bots</a>
-      <a href="dashboards.html">Dashboards</a>
+      <a href="bot.html">Bots</a>
       <a href="business.html" aria-current="page">For business</a>
       <a href="#contact">Contact us</a>
     </nav>
@@ -489,7 +487,7 @@
               <div class="readout" aria-live="polite">
                 <p class="verdict" id="verdict">Pick an input</p>
                 <p class="why" id="why">Each one points at a different build. The picker just saves you the reading.</p>
-                <a class="go" id="go" href="webdev.html" hidden>See it</a>
+                <a class="go" id="go" hidden>See it</a>
               </div>
             </div>
           </div>
@@ -550,17 +548,15 @@
       <li data-cell="found">
         <h3>Business websites</h3>
         <p>A site that loads fast, reads clearly on a phone, and tells someone in ten seconds whether you're what they need.</p>
-        <a class="service-link" href="webdev.html">Web development →</a>
       </li>
       <li data-cell="manual">
         <h3>Workflow bots</h3>
         <p>Slack, Discord or Telegram bots that handle the repetitive part: intake, approvals, reminders and status updates.</p>
-        <a class="service-link" href="bots.html">Bot development →</a>
+        <a class="service-link" href="bot.html">Bot development →</a>
       </li>
       <li data-cell="blind">
         <h3>Custom dashboards</h3>
         <p>One screen with the four or five numbers you actually check, pulled from wherever they already live.</p>
-        <a class="service-link" href="dashboards.html">Dashboards →</a>
       </li>
     </ul>
   </div>
@@ -729,9 +725,7 @@
     <span>© <span id="yr">2026</span> Gridlantis</span>
     <span class="foot-links">
       <a href="index.html">Home</a>
-      <a href="webdev.html">Web development</a>
-      <a href="bots.html">Bots</a>
-      <a href="dashboards.html">Dashboards</a>
+      <a href="bot.html">Bots</a>
     </span>
   </div>
 </footer>
@@ -744,19 +738,19 @@
     found: {
       verdict: "You need a business website",
       why: "Before automation is worth anything, the front door has to work. A fast, clear site usually moves the needle further than anything else on this list.",
-      href: "webdev.html",
+      href: null,
       label: "See web development"
     },
     manual: {
       verdict: "You need a workflow bot",
       why: "Repeated retyping is the cheapest thing to automate and the easiest to measure. Intake, approvals and reminders can come off your team's plate within a couple of weeks.",
-      href: "bots.html",
+      href: "bot.html",
       label: "See bot development"
     },
     blind: {
       verdict: "You need a custom dashboard",
       why: "One screen, the four or five numbers you actually check, pulled from wherever they already live. Build time depends mostly on how tidy that data is today.",
-      href: "dashboards.html",
+      href: null,
       label: "See dashboards"
     }
   };
@@ -780,9 +774,13 @@
 
     verdictEl.textContent = route.verdict;
     whyEl.textContent = route.why;
-    goEl.href = route.href;
-    goEl.textContent = route.label;
-    goEl.hidden = false;
+    if (route.href) {
+      goEl.href = route.href;
+      goEl.textContent = route.label;
+      goEl.hidden = false;
+    } else {
+      goEl.hidden = true;
+    }
   }
 
   choices.forEach(function (btn) {
