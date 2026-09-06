@@ -433,6 +433,72 @@ a{ color: inherit; }
 }
 .button:hover{ background: var(--ink); }
 
+/* ---------- collaborate: the ask form ---------- */
+
+.collab-ask{ margin-top: 0.4rem; }
+.collab-ask > summary{
+  cursor: pointer;
+  list-style: none;               /* Firefox */
+  width: fit-content;
+}
+.collab-ask > summary::-webkit-details-marker{ display: none; }
+.collab-ask > summary::marker{ content: ""; }
+.collab-ask[open] > summary{ background: var(--ink); }
+
+.ask-form{
+  margin-top: 1.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+  max-width: 42rem;
+  display: grid;
+  gap: 0.45rem;
+}
+.ask-form label{
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-top: 0.7rem;
+}
+.ask-form input[type="email"],
+.ask-form textarea{
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 11px 12px;
+  width: 100%;
+}
+.ask-form textarea{ resize: vertical; min-height: 7rem; }
+.ask-form input:focus-visible,
+.ask-form textarea:focus-visible{
+  outline: 2px solid var(--signal);
+  outline-offset: 1px;
+  border-color: var(--signal);
+}
+.ask-send{
+  justify-self: start;
+  margin-top: 1.1rem;
+  border: 0;
+  cursor: pointer;
+}
+.ask-send[disabled]{ opacity: 0.6; cursor: progress; }
+
+.ask-status{
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0 0 0.4rem;
+  padding: 10px 12px;
+  border-left: 3px solid var(--signal);
+  background: var(--paper);
+  color: var(--ink);
+}
+.ask-status.is-error{ border-left-color: #b03030; }
+
 .contact-list{
   list-style: none;
   margin: 0;
@@ -603,12 +669,9 @@ a{ color: inherit; }
       <p class="entry-name">Optic Oversight</p>
       <h2>Reading a city from its public signals</h2>
       <p class="entry-abstract">
-        A single-pane view of one metro area, assembled only from feeds that are already
-        public: traffic incidents and flow tiles, traffic camera stills, aircraft
-        positions, and radio scanner audio. No private data, no scraping behind a login.
-        It began as an exercise in feed reliability, because most of these sources go
-        down, rate-limit, or silently change shape. It turned into a study of how much
-        situational picture you can assemble from sources nobody is protecting.
+        An OSINT tool that gives you an insightful view of populated environments. Using
+        traffic flow, city camera, crime incident, satellite, natural disaster, street
+        view, aircraft data, and climate data.
       </p>
       <p class="question">
         <span class="tag-line">Open question</span>
@@ -633,13 +696,29 @@ a{ color: inherit; }
       <div>
         <p class="tag-line">Working together</p>
         <h2>Bring us a question you can't get a straight answer to.</h2>
-        <p>
-          The Build lab takes on outside problems when they're genuinely open: a system
-          nobody can characterize, a build nobody wants to own, a claim a vendor keeps
-          making that you'd like independently tested. Remote-friendly, with student and
-          community projects welcome.
-        </p>
-        <a class="button" href="https://gridlantis.org">Start a conversation</a>
+        <details class="collab-ask">
+          <summary class="button">Start a conversation</summary>
+          <!-- Native action/method so this still submits with JS disabled; the
+               handler below intercepts it to post in place instead. -->
+          <form class="ask-form" id="askForm"
+                action="https://formspree.io/f/mbdlnzzb" method="POST">
+            <p class="ask-status" id="askStatus" role="status" hidden></p>
+
+            <label for="askEmail">Email</label>
+            <input type="email" id="askEmail" name="email" required
+                   autocomplete="email" placeholder="you@example.com">
+
+            <label for="askMessage">What's the question?</label>
+            <textarea id="askMessage" name="message" rows="5" required
+                      placeholder="What you're trying to find out, and what you've already tried."></textarea>
+
+            <input type="hidden" name="_subject" value="Research lab enquiry">
+            <!-- honeypot: bots fill it, people never see it -->
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" hidden>
+
+            <button type="submit" class="button ask-send">Send</button>
+          </form>
+        </details>
       </div>
       <ul class="contact-list">
         <li><a href="https://gridlantis.org">Gridlantis.org <span>Contact</span></a></li>
@@ -778,6 +857,53 @@ a{ color: inherit; }
       draw(last);
     })(0);
   }
+  /* ================================================================
+     3. ASK FORM
+     Posts to Formspree in place, so the disclosure never navigates
+     away. Falls back to a normal form POST when JS is unavailable.
+     ================================================================ */
+  var askForm = document.getElementById("askForm");
+
+  if (askForm) {
+    var askStatus = document.getElementById("askStatus");
+
+    askForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var send = askForm.querySelector(".ask-send");
+      var label = send.textContent;
+      send.disabled = true;
+      send.textContent = "Sending";
+
+      var show = function (text, isError) {
+        askStatus.textContent = text;
+        askStatus.classList.toggle("is-error", !!isError);
+        askStatus.hidden = false;
+      };
+
+      fetch(askForm.action, {
+        method: "POST",
+        body: new FormData(askForm),
+        headers: { Accept: "application/json" }
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.status);
+          show("Thanks \u2014 that's with us. You'll get a reply at the address you gave.", false);
+          askForm.reset();
+        })
+        .catch(function () {
+          show(
+            "That didn't send. Email Gridlantis@gmail.com directly and we'll pick it up there.",
+            true
+          );
+        })
+        .then(function () {
+          send.disabled = false;
+          send.textContent = label;
+        });
+    });
+  }
+
 })();
 </script>
 
