@@ -38,7 +38,29 @@
     />
     <meta property="og:url" content="https://gridlantis.org" />
     <meta property="og:type" content="website" />
+    <meta name="author" content="Makih Green" />
     <title>Gridlantis | Digital Solutions</title>
+
+    <!-- Structured data: the machine-readable version of the byline in the
+         header. This is how search engines are meant to be told who runs the
+         site - a Person node attached to the Organization, not keywords
+         buried in the markup. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Gridlantis",
+        "url": "https://gridlantis.org",
+        "logo": "https://gridlantis.org/icon-512.png",
+        "founder": {
+          "@type": "Person",
+          "name": "Makih Green",
+          "alternateName": "Kih Green",
+          "jobTitle": "Founder & Principal Engineer",
+          "worksFor": { "@type": "Organization", "name": "Gridlantis" }
+        }
+      }
+    </script>
     <!-- Favicons -->
     <link rel="icon" href="gridfav.ico" type="image/x-icon" />
     <link rel="icon" type="image/png" href="gridfav.png" />
@@ -256,8 +278,20 @@
         position: relative;
       }
 
+      /* The wordmark and the byline share one column, so the pair reads as a
+         single masthead rather than two competing items in the bar. */
+      .navbar-brand {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1px;
+        min-height: 44px;
+        position: relative;
+      }
+
       .navbar-logo {
-        font-size: clamp(1.2rem, 3vw, 1.5rem);
+        padding: 0;
+        font-size: clamp(1.1rem, 3vw, 1.35rem);
         font-weight: 800;
         color: var(--text-color);
         text-decoration: none;
@@ -265,12 +299,59 @@
         align-items: center;
         gap: 10px;
         letter-spacing: -0.5px;
-        padding: 10px 0;
-        min-height: 44px;
+        line-height: 1.15;
+      }
+
+      /* Stacking cost the link its 44px tap target, so give it one back
+         without changing the layout. */
+      .navbar-logo::before {
+        content: "";
+        position: absolute;
+        inset: -8px -8px -8px -8px;
       }
 
       .navbar-logo:hover {
         color: var(--primary-color);
+      }
+
+      .navbar-byline {
+        margin: 0;
+        display: flex;
+        align-items: baseline;
+        gap: 7px;
+        font-size: 0.66rem;
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      .byline-name {
+        font-weight: 600;
+        color: var(--text-color);
+      }
+
+      .byline-role {
+        color: var(--text-secondary);
+      }
+
+      .byline-role::before {
+        content: "\00b7";
+        margin-right: 7px;
+      }
+
+      /* Narrow bars: keep the name, drop the title before it can crowd the
+         menu button. */
+      @media (max-width: 560px) {
+        .byline-role {
+          display: none;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .navbar-byline {
+          display: none;
+        }
       }
 
       /* Desktop Navigation */
@@ -391,14 +472,14 @@
           width: 100%;
         }
 
-        .navbar a {
+        .navbar ul a {
           padding: 15px 20px;
           justify-content: flex-start;
           border-radius: 0;
           border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        body.dark-mode .navbar a {
+        body.dark-mode .navbar ul a {
           border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -1141,39 +1222,6 @@
         line-height: 1.47059;
       }
 
-      .signature {
-        text-align: center;
-        margin-top: 60px;
-        padding-top: 40px;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      @media (min-width: 768px) {
-        .signature {
-          margin-top: 80px;
-        }
-      }
-
-      body.dark-mode .signature {
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .signature p {
-        font-size: clamp(1.25rem, 3vw, 21px);
-        font-weight: 600;
-        color: var(--text-color);
-      }
-
-      .signature .role {
-        font-size: clamp(1rem, 2vw, 17px);
-        color: var(--text-secondary);
-        margin-top: 5px;
-      }
-
       .accent-line {
         height: 1px;
         width: 80px;
@@ -1339,7 +1387,13 @@
     <!-- Navigation -->
     <nav class="navbar">
       <div class="navbar-container">
-        <a href="index.html" class="navbar-logo">GRIDLANTIS</a>
+        <div class="navbar-brand">
+          <a href="index.html" class="navbar-logo">GRIDLANTIS</a>
+          <p class="navbar-byline">
+            <span class="byline-name">Kih Green</span>
+            <span class="byline-role">Founder &amp; Principal Engineer</span>
+          </p>
+        </div>
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
           <i class="fas fa-bars"></i>
         </button>
@@ -1525,10 +1579,6 @@
         </div>
       </div>
 
-      <div class="signature fade-in">
-        <p>Kih Green</p>
-        <p class="role">Founder & Principal Engineer</p>
-      </div>
     </section>
 
     <!-- Newsletter Section -->
