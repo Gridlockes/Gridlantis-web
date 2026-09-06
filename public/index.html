@@ -278,20 +278,8 @@
         position: relative;
       }
 
-      /* The wordmark and the byline share one column, so the pair reads as a
-         single masthead rather than two competing items in the bar. */
-      .navbar-brand {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 1px;
-        min-height: 44px;
-        position: relative;
-      }
-
       .navbar-logo {
-        padding: 0;
-        font-size: clamp(1.1rem, 3vw, 1.35rem);
+        font-size: clamp(1.2rem, 3vw, 1.5rem);
         font-weight: 800;
         color: var(--text-color);
         text-decoration: none;
@@ -299,59 +287,12 @@
         align-items: center;
         gap: 10px;
         letter-spacing: -0.5px;
-        line-height: 1.15;
-      }
-
-      /* Stacking cost the link its 44px tap target, so give it one back
-         without changing the layout. */
-      .navbar-logo::before {
-        content: "";
-        position: absolute;
-        inset: -8px -8px -8px -8px;
+        padding: 10px 0;
+        min-height: 44px;
       }
 
       .navbar-logo:hover {
         color: var(--primary-color);
-      }
-
-      .navbar-byline {
-        margin: 0;
-        display: flex;
-        align-items: baseline;
-        gap: 7px;
-        font-size: 0.66rem;
-        line-height: 1.2;
-        letter-spacing: 0.02em;
-        white-space: nowrap;
-        pointer-events: none;
-      }
-
-      .byline-name {
-        font-weight: 600;
-        color: var(--text-color);
-      }
-
-      .byline-role {
-        color: var(--text-secondary);
-      }
-
-      .byline-role::before {
-        content: "\00b7";
-        margin-right: 7px;
-      }
-
-      /* Narrow bars: keep the name, drop the title before it can crowd the
-         menu button. */
-      @media (max-width: 560px) {
-        .byline-role {
-          display: none;
-        }
-      }
-
-      @media (max-width: 380px) {
-        .navbar-byline {
-          display: none;
-        }
       }
 
       /* Desktop Navigation */
@@ -1264,6 +1205,51 @@
         text-decoration: underline;
       }
 
+      /* Sits last in the footer, so the page signs off with the byline. */
+      .footer-byline {
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: baseline;
+        gap: 4px 9px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      body.dark-mode .footer-byline {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .footer-byline .byline-name {
+        font-weight: 600;
+        color: var(--text-color);
+      }
+
+      .footer-byline .byline-role {
+        color: var(--text-secondary);
+      }
+
+      /* The separator only makes sense while the two sit on one line. */
+      .footer-byline .byline-role::before {
+        content: "\00b7";
+        margin-right: 9px;
+      }
+
+      @media (max-width: 420px) {
+        .footer-byline {
+          flex-direction: column;
+          gap: 3px;
+        }
+        .footer-byline .byline-role::before {
+          content: "";
+          margin-right: 0;
+        }
+      }
+
       /* Inline links in a paragraph are only as tall as their text (~15px).
          Padding them out to 44px keeps them thumb-sized on a phone. */
       .footer-legal {
@@ -1387,13 +1373,7 @@
     <!-- Navigation -->
     <nav class="navbar">
       <div class="navbar-container">
-        <div class="navbar-brand">
-          <a href="index.html" class="navbar-logo">GRIDLANTIS</a>
-          <p class="navbar-byline">
-            <span class="byline-name">Kih Green</span>
-            <span class="byline-role">Founder &amp; Principal Engineer</span>
-          </p>
-        </div>
+        <a href="index.html" class="navbar-logo">GRIDLANTIS</a>
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
           <i class="fas fa-bars"></i>
         </button>
@@ -1704,6 +1684,11 @@
       </div>
       <p style="margin-top: 20px; font-size: 0.8em">
         System Status: Online • Operational Since: 2024
+      </p>
+
+      <p class="footer-byline">
+        <span class="byline-name">Kih Green</span>
+        <span class="byline-role">Founder &amp; Principal Engineer</span>
       </p>
     </footer>
 
