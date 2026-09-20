@@ -16,7 +16,9 @@
     "check:links": "node scripts/check-links.js",
     "package": "node scripts/package.js",
     "prepackage": "npm run check:links",
-    "tunnel": "echo 'Start the server first, then: cloudflared tunnel --url http://localhost:<port from npm start>'"
+    "tunnel": "echo 'Start the server first, then: cloudflared tunnel --url http://localhost:<port from npm start>'",
+    "deploy": "wrangler pages deploy public --project-name=gridlantis-site",
+    "deploy:preview": "wrangler pages deploy public --project-name=gridlantis-site --branch=preview"
   },
   "dependencies": {
     "compression": "^1.7.4",
@@ -24,6 +26,11 @@
     "helmet": "^7.1.0"
   },
   "devDependencies": {
-    "archiver": "^7.0.1"
+    "archiver": "^7.0.1",
+    "wrangler": "^4.135.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20260918.1": true
   }
 }
