@@ -90,17 +90,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- Sound effects -->
-    <audio
-      id="glitchHoverSound"
-      src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-positive-interface-beep-257.mp3"
-      preload="none"
-    ></audio>
-    <audio
-      id="glitchClickSound"
-      src="https://assets.mixkit.co/sfx/preview/mixkit-tech-interface-click-258.mp3"
-      preload="none"
-    ></audio>
     <style>
       /* Custom scrollbar */
       ::-webkit-scrollbar {
@@ -1761,29 +1750,6 @@
           ) {
             closeMobileMenu();
           }
-        });
-
-        // Sound effects
-        const hoverSound = document.getElementById("glitchHoverSound");
-        const clickSound = document.getElementById("glitchClickSound");
-        const interactiveElements = document.querySelectorAll(
-          ".section, .navbar a, .card, .card-link, .submit-btn"
-        );
-
-        interactiveElements.forEach((element) => {
-          element.addEventListener("mouseenter", function () {
-            hoverSound.currentTime = 0;
-            hoverSound
-              .play()
-              .catch((e) => console.log("Audio play failed:", e));
-          });
-
-          element.addEventListener("click", function () {
-            clickSound.currentTime = 0;
-            clickSound
-              .play()
-              .catch((e) => console.log("Audio play failed:", e));
-          });
         });
 
         // Newsletter form submission

@@ -97,7 +97,7 @@ app.use(
         fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:"],
         imgSrc: ["'self'", "data:", "https:"],
         connectSrc: ["'self'", "https://www.google-analytics.com", "https://formspree.io", "https://www.googletagmanager.com"],
-        mediaSrc: ["'self'", "https://assets.mixkit.co"],
+        mediaSrc: ["'self'"],
         formAction: ["'self'", "https://formspree.io"],
         frameAncestors: ["'none'"],
       },
