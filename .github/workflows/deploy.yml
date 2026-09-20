@@ -1,0 +1,40 @@
+# Pushing to main publishes gridlantis.org.
+#
+# The Pages project (gridlantis-site) is Direct Upload, not Git-connected -
+# Cloudflare cannot convert an existing Direct Upload project to a Git one,
+# and the custom domains live on this project. So this workflow reproduces
+# push-to-deploy by running the same `wrangler pages deploy` that `npm run
+# deploy` runs locally.
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Same gate as prepackage: refuse to publish broken internal links.
+      - run: npm run check:links
+
+      - run: npx wrangler pages deploy public --project-name=gridlantis-site
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
