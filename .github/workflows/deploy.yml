@@ -24,6 +24,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # .nvmrc is pinned to 22 because wrangler v4 refuses to run on anything
+      # older ("Wrangler requires at least Node.js v22.0.0"). Don't lower it.
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
