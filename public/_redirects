@@ -1,0 +1,21 @@
+# Download URLs for gridlantis.org.
+#
+# Cloudflare Pages refuses any single file over 25 MiB and the installers are
+# around 100 MB each, so they cannot be served from this repo. They live on
+# GitHub Releases instead, and these rules point at them.
+#
+# The value of the indirection: every link on the site is a gridlantis.org
+# URL. If the binaries move — to R2, to a CDN, anywhere — only this file
+# changes, and no published link ever breaks.
+#
+# Targets use /releases/latest/, so a new release is picked up automatically
+# without editing anything here. This depends on the installer filenames
+# staying version-free, which is why package.json pins artifactName.
+
+/download/virtual-labs/linux      https://github.com/Gridlockes/Virtual-Labs/releases/latest/download/Virtual-Labs-linux-x86_64.AppImage      302
+/download/virtual-labs/windows    https://github.com/Gridlockes/Virtual-Labs/releases/latest/download/Virtual-Labs-windows-x64-setup.exe      302
+/download/virtual-labs/macos      https://github.com/Gridlockes/Virtual-Labs/releases/latest/download/Virtual-Labs-macos-universal.dmg        302
+/download/virtual-labs/checksums  https://github.com/Gridlockes/Virtual-Labs/releases/latest/download/SHA256SUMS                              302
+
+# The release listing, for anyone who wants notes or an older version.
+/download/virtual-labs            https://github.com/Gridlockes/Virtual-Labs/releases/latest                                                  302

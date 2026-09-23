@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gridlantis col-lab — write, code and talk in one place</title>
+<meta name="description" content="A collaborative notebook: full-page documents with runnable code blocks and drawings, floating group and private chats, and live voice rooms. Free on your own device; cloud storage when you want to share.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Gridlantis">
+<meta property="og:title" content="Gridlantis col-lab — write, code and talk in one place">
+<meta property="og:description" content="A collaborative notebook: full-page documents with runnable code blocks and drawings, floating group and private chats, and live voice rooms.">
+<meta property="og:url" content="https://gridlantis.org/collab">
+<meta property="og:image" content="https://gridlantis.org/Gridlantis_prebanner.png">
+<meta property="og:image:width" content="600">
+<meta property="og:image:height" content="240">
+<meta property="og:image:alt" content="Gridlantis Labs banner: a node-and-spoke G emblem beside the Gridlantis Labs wordmark, over a wireframe city skyline.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gridlantis.org/Gridlantis_prebanner.png">
+<link rel="icon" href="/gridfav.ico" type="image/x-icon">
+<link rel="icon" type="image/png" href="/gridfav.png">
+<link rel="apple-touch-icon" href="/gridfav-apple.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16151C;
+    --seamless:#E3E5E8;
+    --seamless-deep:#CDD1D7;
+    --key:#FF9E1B;
+    --fill:#5B2BE0;
+    --line:#B4B9C1;
+    --paper:#F6F7F8;
+    /* col-lab's own accent, borrowed from the app's default theme, so the page
+       and the thing it is describing read as the same product. */
+    --live:#2FBFA8;
+
+    --display:"Archivo Black", system-ui, sans-serif;
+    --body:"DM Sans", system-ui, sans-serif;
+    --mono:"DM Mono", ui-monospace, monospace;
+
+    --gutter:clamp(20px, 5vw, 72px);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    font-family:var(--body);
+    color:var(--ink);
+    background:
+      radial-gradient(120% 80% at 50% 0%, var(--paper) 0%, var(--seamless) 45%, var(--seamless-deep) 100%);
+    background-attachment:fixed;
+    line-height:1.55;
+  }
+  img,svg{max-width:100%;display:block}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--fill); outline-offset:3px}
+
+  .wrap{max-width:1200px;margin-inline:auto;padding-inline:var(--gutter)}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#4A4956;
+    margin:0;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    padding-block:22px;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:var(--display);
+    font-size:1.05rem;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    text-decoration:none;
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:var(--live);
+    box-shadow:0 0 0 3px rgba(47,191,168,.25);
+  }
+  .masthead nav{display:flex;gap:22px;font-family:var(--mono);font-size:.78rem;letter-spacing:.06em}
+  .masthead nav a{text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+  .masthead nav a:hover{border-bottom-color:var(--ink)}
+  @media (max-width:640px){ .masthead nav a:not(.keep){display:none} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+    gap:clamp(32px,6vw,72px);
+    align-items:center;
+    padding-block:clamp(44px,8vw,96px);
+  }
+  @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+
+  .hero h1{
+    font-family:var(--display);
+    font-size:clamp(2.5rem, 7.6vw, 5rem);
+    line-height:.94;
+    letter-spacing:-.02em;
+    margin:.35em 0 0;
+    text-transform:uppercase;
+  }
+  .hero h1 .lit{ color:var(--fill); }
+  .hero p.lede{
+    max-width:48ch;
+    font-size:clamp(1.02rem,1.9vw,1.2rem);
+    margin:1.3em 0 0;
+    color:#33323D;
+  }
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
+    padding:15px 26px;border-radius:2px;text-decoration:none;border:1px solid var(--ink);
+    background:var(--ink);color:var(--paper);
+    transition:transform .15s ease, background .15s ease, color .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);background:var(--fill);border-color:var(--fill)}
+  .btn--ghost{background:transparent;color:var(--ink)}
+  .btn--ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .cta-note{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;
+    color:#4A4956;margin:16px 0 0;
+  }
+
+  /* ---------- signature: the page being written on ---------- */
+  .sheet-stack{position:relative;display:flex;justify-content:center}
+  .sheet{
+    position:relative;
+    width:min(460px,100%);
+    background:#10161F;
+    border-radius:6px;
+    padding:22px 24px 26px;
+    box-shadow:0 40px 70px -34px rgba(22,21,28,.6);
+    font-family:var(--mono);
+    color:#E6EDF5;
+    overflow:hidden;
+  }
+  .sheet .glow{position:absolute;width:190px;height:190px;border-radius:50%;filter:blur(50px);opacity:.42;pointer-events:none}
+  .sheet .glow.a{background:var(--live);top:-64px;right:-52px}
+  .sheet .glow.b{background:var(--fill);bottom:-70px;left:-56px;opacity:.55}
+
+  .sheet-bar{
+    display:flex;align-items:center;gap:8px;
+    padding-bottom:14px;margin-bottom:18px;
+    border-bottom:1px solid rgba(230,237,245,.12);
+    font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(230,237,245,.5);
+  }
+  .sheet-bar .pip{width:8px;height:8px;border-radius:50%;background:var(--live)}
+  .sheet-bar .grow{flex:1}
+
+  .sheet h3{
+    font-family:var(--body);font-weight:700;font-size:1.15rem;
+    margin:0 0 14px;color:#F2F6FA;letter-spacing:-.01em;
+  }
+  .sheet p.line{
+    margin:0 0 10px;font-family:var(--body);font-size:.88rem;
+    color:rgba(230,237,245,.74);line-height:1.5;
+  }
+  .caret{
+    display:inline-block;width:2px;height:1em;vertical-align:-.15em;
+    background:var(--key);margin-left:1px;
+    animation:blink 1.1s steps(1,end) infinite;
+  }
+  @keyframes blink{0%,55%{opacity:1}56%,100%{opacity:0}}
+
+  /* Someone else's cursor, with their name on it — the thing that makes a
+     shared document feel shared. */
+  .peer{
+    position:relative;display:inline-block;width:2px;height:1.05em;
+    vertical-align:-.18em;background:var(--fill);margin:0 1px;
+  }
+  .peer::after{
+    content:attr(data-who);
+    position:absolute;left:-1px;top:-1.35em;
+    background:var(--fill);color:#fff;
+    font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;
+    padding:1px 5px;border-radius:2px;white-space:nowrap;
+  }
+  .peer.b{background:var(--key)}
+  .peer.b::after{background:var(--key);color:var(--ink)}
+
+  .sheet-code{
+    margin:16px 0 0;padding:13px 15px;
+    background:rgba(8,12,18,.72);
+    border:1px solid rgba(230,237,245,.1);
+    border-radius:4px;
+    font-size:.74rem;line-height:1.7;
+  }
+  .sheet-code .k{color:#B692F6}
+  .sheet-code .s{color:#8CE0CE}
+  .sheet-code .c{color:rgba(230,237,245,.4)}
+  .sheet-run{
+    display:flex;align-items:center;gap:8px;margin-top:11px;
+    font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--live);
+  }
+
+  .sheet-people{
+    display:flex;align-items:center;gap:7px;margin-top:20px;
+    font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:rgba(230,237,245,.5);
+  }
+  .face{
+    width:22px;height:22px;border-radius:50%;
+    display:grid;place-items:center;
+    font-size:.6rem;font-weight:700;color:#0C1118;
+    font-family:var(--body);
+  }
+  .face.one{background:var(--live)}
+  .face.two{background:var(--fill);color:#fff}
+  .face.three{background:var(--key)}
+
+  .sheet-caption{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    color:#4A4956;text-align:center;margin-top:16px;
+  }
+
+  /* ---------- what it is ---------- */
+  .what{border-block:1px solid var(--line);padding-block:clamp(44px,7vw,76px)}
+  .what h2{
+    font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);
+    text-transform:uppercase;letter-spacing:-.015em;margin:10px 0 0;max-width:20ch;
+  }
+  .feature-list{
+    margin:36px 0 0;padding:0;list-style:none;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:28px;
+  }
+  .feature-list li{border-top:2px solid var(--ink);padding-top:15px}
+  .feature-list h3{font-family:var(--body);font-weight:700;font-size:1.02rem;margin:0 0 6px}
+  .feature-list p{margin:0;color:#43424E;font-size:.94rem}
+
+  /* ---------- storage ---------- */
+  .storage{padding-block:clamp(48px,8vw,88px)}
+  .storage h2{
+    font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);
+    text-transform:uppercase;letter-spacing:-.015em;margin:10px 0 0;max-width:22ch;
+  }
+  .storage .lede{max-width:62ch;margin:18px 0 0;color:#43424E}
+  .plans{
+    margin-top:38px;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);
+  }
+  .plan{background:var(--paper);padding:30px 26px 34px}
+  .plan-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .plan h3{
+    font-family:var(--display);font-size:1.22rem;text-transform:uppercase;
+    letter-spacing:-.01em;margin:0;
+  }
+  .plan .tag{
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+    padding:3px 8px;border:1px solid var(--line);border-radius:2px;color:#4A4956;
+  }
+  .plan .tag.now{border-color:var(--live);color:#1B7A6B}
+  .plan .price{
+    font-family:var(--display);font-size:2rem;margin:16px 0 4px;letter-spacing:-.02em;
+  }
+  .plan .price .per{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:#4A4956}
+  /* Until there is a number to show, the slot says what the plan is rather than
+     rendering a placeholder that reads as a broken price. */
+  .plan .price--soft{font-size:1.3rem}
+  .plan ul{margin:20px 0 0;padding:0 0 0 18px;display:grid;gap:8px}
+  .plan li{font-size:.93rem;color:#43424E}
+  .plan li.no{color:#6C6B78;list-style-type:'– '}
+  .plan--cloud{background:var(--ink);color:var(--paper)}
+  .plan--cloud h3{color:var(--paper)}
+  .plan--cloud li{color:rgba(246,247,248,.74)}
+  .plan--cloud .price{color:var(--key)}
+  .plan--cloud .price .per{color:rgba(246,247,248,.55)}
+  .plan--cloud .tag{border-color:rgba(246,247,248,.3);color:rgba(246,247,248,.66)}
+
+  /* ---------- downloads ---------- */
+  .downloads{border-block:1px solid var(--line);padding-block:clamp(48px,8vw,88px)}
+  .downloads h2{
+    font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.4rem);
+    text-transform:uppercase;letter-spacing:-.015em;margin:10px 0 0;max-width:20ch;
+  }
+  .downloads .lede{max-width:60ch;margin:18px 0 0;color:#43424E}
+  .dl-grid{
+    margin-top:36px;display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;
+  }
+  .dl{
+    border:1px solid var(--line);background:var(--paper);
+    padding:26px 22px 24px;display:flex;flex-direction:column;gap:6px;
+  }
+  .dl h3{font-family:var(--display);font-size:1.12rem;text-transform:uppercase;margin:0;letter-spacing:-.01em}
+  .dl .meta{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:#4A4956;text-transform:uppercase}
+  .dl .btn{margin-top:16px;justify-content:center}
+  /* A build that has not been published yet is shown, not hidden — but it is
+     plainly not a link, so nobody clicks into a 404. */
+  .dl .btn[aria-disabled="true"]{
+    background:transparent;color:#6C6B78;border-color:var(--line);
+    cursor:not-allowed;pointer-events:none;
+  }
+  .dl-note{
+    margin-top:26px;padding:18px 20px;
+    border-left:3px solid var(--key);background:rgba(255,158,27,.09);
+    font-size:.93rem;color:#43424E;max-width:70ch;
+  }
+  .dl-note strong{color:var(--ink)}
+
+  /* ---------- access ---------- */
+  .access{background:var(--ink);color:var(--paper);padding-block:clamp(52px,8vw,96px)}
+  .access .eyebrow{color:var(--live)}
+  .access-inner{
+    display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+    gap:clamp(32px,6vw,72px);align-items:start;
+  }
+  @media (max-width:880px){ .access-inner{grid-template-columns:1fr} }
+  .access h2{
+    font-family:var(--display);font-size:clamp(2rem,5vw,3.1rem);
+    text-transform:uppercase;line-height:.98;letter-spacing:-.02em;margin:10px 0 0;
+  }
+  .access .lede{color:rgba(246,247,248,.72);max-width:40ch;margin-top:18px}
+  .access .btn{margin-top:28px;background:var(--live);border-color:var(--live);color:#09211D}
+  .access .btn:hover{background:var(--paper);border-color:var(--paper);color:var(--ink)}
+  .steps{margin:0;padding:0;list-style:none;counter-reset:step}
+  .steps li{
+    counter-increment:step;
+    border-top:1px solid rgba(246,247,248,.16);
+    padding:18px 0 18px 46px;position:relative;
+  }
+  .steps li::before{
+    content:counter(step,decimal-leading-zero);
+    position:absolute;left:0;top:18px;
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;color:var(--key);
+  }
+  .steps h3{font-family:var(--body);font-weight:700;font-size:1rem;margin:0 0 5px}
+  .steps p{margin:0;color:rgba(246,247,248,.66);font-size:.93rem}
+  .steps a{color:var(--key)}
+
+  footer{background:var(--ink);color:rgba(246,247,248,.5);padding-bottom:40px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
+    border-top:1px solid rgba(246,247,248,.14);padding-top:24px;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.06em}
+  footer a{color:rgba(246,247,248,.7)}
+
+  /* Touch targets: inline links are only as tall as their line, which is well
+     under the 44px a fingertip needs. */
+  @media (max-width: 780px){
+    .masthead nav a,
+    .brand,
+    .steps a,
+    footer a{ display:inline-flex;align-items:center;min-height:44px; }
+    .masthead nav{ gap:4px 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>Gridlantis</a>
+    <nav aria-label="Primary">
+      <a href="#what">What it is</a>
+      <a href="#storage">Where notes live</a>
+      <a href="/virtual-labs">Virtual Labs</a>
+      <a href="#downloads">Download</a>
+      <a class="keep" href="#access">Get started</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div>
+      <p class="eyebrow">Gridlantis col-lab</p>
+      <h1>Write, code<br>and <span class="lit">talk</span><br>in one place</h1>
+      <p class="lede">
+        A notebook where the document owns the screen. Prose, runnable code and drawings on
+        the same page — with the conversation floating above it in windows you can drag
+        anywhere, and a voice room one click away.
+      </p>
+      <div class="cta-row">
+        <a class="btn" href="#access">Get started</a>
+        <a class="btn btn--ghost" href="#downloads">Download for desktop</a>
+      </div>
+      <p class="cta-note">Free on your own device · No account needed to read this page</p>
+    </div>
+
+    <div class="sheet-stack">
+      <div>
+        <div class="sheet" role="img" aria-label="A col-lab document being edited by three people at once: a title, a paragraph with two other people's named cursors in it, and a JavaScript code block with its output below.">
+          <span class="glow a" aria-hidden="true"></span>
+          <span class="glow b" aria-hidden="true"></span>
+
+          <div class="sheet-bar">
+            <span class="pip" aria-hidden="true"></span>
+            <span>Live</span>
+            <span class="grow"></span>
+            <span>3 here</span>
+          </div>
+
+          <h3>Sprint notes<span class="caret" aria-hidden="true"></span></h3>
+          <p class="line">
+            Ship the parser first<span class="peer" data-who="Ada" aria-hidden="true"></span>, then the
+            formatter. Everything else can wait for next week.
+          </p>
+          <p class="line">
+            Rough timing below<span class="peer b" data-who="Sam" aria-hidden="true"></span> —
+            numbers are off the top of my head.
+          </p>
+
+          <div class="sheet-code">
+            <span class="c">// runs right here, in a sandbox</span><br>
+            <span class="k">const</span> days = [3, 2, 5];<br>
+            days.<span class="k">reduce</span>((a, b) =&gt; a + b);
+          </div>
+          <div class="sheet-run"><span aria-hidden="true">▸</span> Output — 10</div>
+
+          <div class="sheet-people">
+            <span class="face one" aria-hidden="true">A</span>
+            <span class="face two" aria-hidden="true">S</span>
+            <span class="face three" aria-hidden="true">K</span>
+            <span>editing together</span>
+          </div>
+        </div>
+        <p class="sheet-caption">One page, three people, no refresh</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="what" id="what">
+  <div class="wrap">
+    <p class="eyebrow">What's in it</p>
+    <h2>A document, a conversation and a call — without switching apps</h2>
+    <ul class="feature-list">
+      <li>
+        <h3>Pages, not text boxes</h3>
+        <p>A note fills the window like a sheet of paper. Underneath it is a stack of blocks — markdown prose, code, drawings — that you add and reorder as you write.</p>
+      </li>
+      <li>
+        <h3>Code that runs</h3>
+        <p>Syntax highlighting for JavaScript, TypeScript, Python, Rust, C/C++, Java, PHP, SQL, HTML, CSS, JSON, YAML and more. JavaScript blocks run in a sandboxed worker and print their output below.</p>
+      </li>
+      <li>
+        <h3>Drawings on the same page</h3>
+        <p>A pen, a highlighter, an eraser, colours and a brush size. Drop in pictures, drag and resize them. Strokes appear for everyone while they are still being drawn.</p>
+      </li>
+      <li>
+        <h3>Chats that float</h3>
+        <p>Groups and private chats open in windows you can move anywhere and minimise to a dock, so talking never takes you off the page you are writing.</p>
+      </li>
+      <li>
+        <h3>Voice rooms</h3>
+        <p>Join a group's call in one click. Audio goes peer to peer — the server only introduces people to each other and never handles the sound.</p>
+      </li>
+      <li>
+        <h3>Private by default</h3>
+        <p>Signing up joins you to nothing and announces you to nobody. New groups are invite-only, and you find a person by looking them up, never by browsing a list.</p>
+      </li>
+      <li>
+        <h3>Works with no connection</h3>
+        <p>A note you have open keeps working when the network drops. What you write is kept on the device and merges back in when you are online again.</p>
+      </li>
+      <li>
+        <h3>Take it with you</h3>
+        <p>Any note downloads as plain text or a formatted PDF, and any drawing as a PNG. Nothing you write is locked in here.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="storage" id="storage">
+  <div class="wrap">
+    <p class="eyebrow">Where your notes live</p>
+    <h2>On your device, or in the cloud — you pick, note by note</h2>
+    <p class="lede">
+      Every note lives in exactly one of two places, and col-lab says which one on the note
+      itself. Moving a note between them is one button, either way.
+    </p>
+
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-head">
+          <h3>On your device</h3>
+          <span class="tag now">Free</span>
+        </div>
+        <p class="price">Free<span class="per"> · forever</span></p>
+        <ul>
+          <li>Everything above: prose, code, drawings, downloads</li>
+          <li>Kept in your browser's storage, or — in the desktop app — in a folder you choose</li>
+          <li>One plain file per note, yours to back up or sync however you like</li>
+          <li>Never sent to our servers</li>
+          <li class="no">No sharing, no co-editing, no second device</li>
+        </ul>
+      </div>
+
+      <div class="plan plan--cloud">
+        <div class="plan-head">
+          <h3>Cloud storage</h3>
+          <span class="tag">Subscription</span>
+        </div>
+        <!-- No number here until the Stripe price is live. When it is, put it in
+             as e.g. "€6<span class="per">/month</span>" and drop price--soft. -->
+        <p class="price price--soft">Paid plan<span class="per"> · price shown at checkout</span></p>
+        <ul>
+          <li>Your notes on every machine you sign in on</li>
+          <li>Share a note into a group or a private chat</li>
+          <li>Several people writing in one note at once, live</li>
+          <li>An offline copy kept in the browser too, so notes still open with no connection</li>
+          <li>Billing handled by Stripe — card details never reach us</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="dl-note">
+      <strong>If a subscription ends, nothing is deleted.</strong> Cloud notes stay readable,
+      downloadable and deletable — they simply stop taking edits until the plan is back, and
+      col-lab offers to pull a copy onto your device. Chats, groups and voice calls are not
+      storage and are not part of the plan: they work on both.
+    </p>
+  </div>
+</section>
+
+<section class="downloads" id="downloads">
+  <div class="wrap">
+    <p class="eyebrow">Download</p>
+    <h2>The desktop app</h2>
+    <p class="lede">
+      The same col-lab in its own window — and one thing the browser cannot do: point it at a
+      folder on your disk and every note kept on your device becomes a plain file in it.
+    </p>
+
+    <div class="dl-grid">
+      <div class="dl">
+        <h3>Linux</h3>
+        <span class="meta">AppImage · x86-64</span>
+        <span class="btn" aria-disabled="true" role="link">Not yet published</span>
+      </div>
+      <div class="dl">
+        <h3>Windows</h3>
+        <span class="meta">Installer · x86-64</span>
+        <span class="btn" aria-disabled="true" role="link">Not yet published</span>
+      </div>
+      <div class="dl">
+        <h3>macOS</h3>
+        <span class="meta">Disk image · Apple silicon &amp; Intel</span>
+        <span class="btn" aria-disabled="true" role="link">Not yet published</span>
+      </div>
+    </div>
+
+    <p class="dl-note">
+      <strong>Builds are not out yet.</strong> The desktop app is finished and works — it has
+      not been packaged and signed for release. In the meantime col-lab runs fully in the
+      browser, and notes you keep on your device there move to the desktop app when it lands.
+    </p>
+  </div>
+</section>
+
+<section class="access" id="access">
+  <div class="wrap access-inner">
+    <div>
+      <p class="eyebrow">Get started</p>
+      <h2>Open it<br>and write</h2>
+      <p class="lede">
+        No invitation, no waiting list. Make an account and the first page is already open in
+        front of you.
+      </p>
+      <a class="btn" href="https://collab.gridlantis.org">Open col-lab</a>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <h3>Make an account</h3>
+        <p>An email address and a password. Signing up joins you to nothing and tells nobody you are here.</p>
+      </li>
+      <li>
+        <h3>Start writing</h3>
+        <p>Your notes are kept on your device and cost nothing. Add a code block, draw something, download it as a PDF.</p>
+      </li>
+      <li>
+        <h3>Bring people in, when you want to</h3>
+        <p>Subscribe to cloud storage and a note can be shared into a group, co-edited live, and opened on any machine you sign in on.</p>
+      </li>
+      <li>
+        <h3>Forgotten your password?</h3>
+        <p>Passwords are never recoverable, only replaceable — <em>Forgot password?</em> on the sign-in screen emails you a link that works once.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Gridlantis</span>
+    <span><a href="index.html">gridlantis.org</a> · Built to be left, not locked into</span>
+  </div>
+</footer>
+
+</body>
+</html>
