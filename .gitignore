@@ -3,3 +3,8 @@ dist/
 build/
 .env
 .env.local
+
+# col-lab is still being built. The page lives on this machine, but must not
+# reach the site until it is finished — CI deploys whatever is committed, so
+# ignoring it is what keeps it unpublished.
+public/collab.html
