@@ -292,18 +292,13 @@
   .dl h3{font-family:var(--display);font-size:1.12rem;text-transform:uppercase;margin:0;letter-spacing:-.01em}
   .dl .meta{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:#4A4956;text-transform:uppercase}
   .dl .btn{margin-top:16px;justify-content:center}
-  /* A build that has not been published yet is shown, not hidden — but it is
-     plainly not a link, so nobody clicks into a 404. */
-  .dl .btn[aria-disabled="true"]{
-    background:transparent;color:#6C6B78;border-color:var(--line);
-    cursor:not-allowed;pointer-events:none;
-  }
   .dl-note{
     margin-top:26px;padding:18px 20px;
     border-left:3px solid var(--key);background:rgba(255,158,27,.09);
     font-size:.93rem;color:#43424E;max-width:74ch;
   }
   .dl-note strong{color:var(--ink)}
+  .dl-note a{color:inherit;text-underline-offset:3px}
   .dl-note code{font-family:var(--mono);font-size:.84rem;background:rgba(22,21,28,.07);padding:1px 5px}
 
   /* ---------- requirements ---------- */
@@ -509,27 +504,27 @@
     <div class="dl-grid">
       <div class="dl">
         <h3>Linux</h3>
-        <span class="meta">AppImage · x86-64 · ~104 MB</span>
-        <span class="btn" aria-disabled="true" role="link">Not yet published</span>
+        <span class="meta">AppImage · x86-64 · 103 MB</span>
+        <a class="btn" href="/download/virtual-labs/linux">Download</a>
       </div>
       <div class="dl">
         <h3>Windows</h3>
-        <span class="meta">Installer · x86-64</span>
-        <span class="btn" aria-disabled="true" role="link">Not yet published</span>
+        <span class="meta">Installer · x86-64 · 78 MB</span>
+        <a class="btn" href="/download/virtual-labs/windows">Download</a>
       </div>
       <div class="dl">
         <h3>macOS</h3>
-        <span class="meta">Disk image · Apple silicon &amp; Intel</span>
-        <span class="btn" aria-disabled="true" role="link">Not yet published</span>
+        <span class="meta">Disk image · Apple silicon &amp; Intel · 94 MB</span>
+        <a class="btn" href="/download/virtual-labs/macos">Download</a>
       </div>
     </div>
 
     <p class="dl-note">
-      <strong>Builds are not out yet.</strong> The app is finished, and the Linux installer
-      already builds and runs. All three installers are produced together on each release, so
-      they land here at the same time rather than one platform at a time — these buttons go
-      live the moment that happens. Every release ships a <code>SHA256SUMS</code> file, so you
-      can check that a download is the file we published.
+      <strong>These builds are unsigned.</strong> Windows SmartScreen and macOS Gatekeeper
+      will warn the first time you open the app — on Windows choose <em>More info → Run
+      anyway</em>, on macOS right-click the app and choose <em>Open</em>. To confirm a
+      download is exactly the file we published, check it against
+      <a href="/download/virtual-labs/checksums">SHA256SUMS</a>.
     </p>
   </div>
 </section>
