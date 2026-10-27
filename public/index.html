@@ -872,27 +872,6 @@
         font-size: 0.9rem;
       }
 
-      .privacy-note {
-        background: var(--card-bg);
-        border-left: 3px solid var(--primary-color);
-        padding: 18px;
-        border-radius: 0 var(--border-radius) var(--border-radius) 0;
-        margin-top: 25px;
-        font-size: 0.95rem;
-        color: var(--text-secondary);
-      }
-
-      .privacy-note a,
-      .frequency-note a {
-        color: var(--primary-color);
-        text-decoration: underline;
-      }
-
-      .privacy-note i {
-        color: var(--primary-color);
-        margin-right: 8px;
-      }
-
       .form-container {
         width: 100%;
         max-width: 500px;
@@ -1614,16 +1593,6 @@
                 <i class="fas fa-check"></i> Customer relation integrations
               </li>
             </ul>
-
-            <div class="privacy-note">
-              <p>
-                <i class="fas fa-lock"></i> <strong>Data Privacy:</strong> We
-                only use your details to reply to you and send the updates you
-                asked for. Our form provider, Formspree, handles submissions,
-                and we never sell your information. See our
-                <a href="/privacy">Privacy Policy</a>.
-              </p>
-            </div>
           </div>
 
           <div class="form-container">
@@ -1657,7 +1626,20 @@
                   name="email"
                   class="form-control"
                   placeholder="your.email@company.com"
+                  autocomplete="email"
                   required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Phone Number (Optional)</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  class="form-control"
+                  placeholder="(555) 555-5555"
+                  autocomplete="tel"
                 />
               </div>
 
@@ -1677,10 +1659,12 @@
               </button>
 
               <p class="frequency-note">
-                <i class="fas fa-calendar-alt"></i> We send relevant, curated
-                updates only - typically 1-2 times per month. By submitting,
-                you agree to receive these emails and can unsubscribe at any
-                time. <a href="/privacy">Privacy Policy</a>
+                <i class="fas fa-calendar-alt"></i> By submitting your email
+                address or phone number, you agree that Gridlantis may contact
+                you there by email, phone call or text message, both to reply
+                to you and to send curated updates, typically 1-2 times per
+                month. Message and data rates may apply. You can opt out at any
+                time.
               </p>
             </form>
           </div>
