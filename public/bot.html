@@ -99,10 +99,125 @@ p{margin:0}
 
 /* ---------- hero ---------- */
 .hero{padding:clamp(3rem,7vw,5.5rem) 0 1rem}
-.hero-lede{max-width:18ch}
+.hero-lede{max-width:22ch}
 .hero h1 span{color:var(--lilac);display:block}
 .hero-sub{margin-top:1.4rem;max-width:52ch;color:var(--muted);font-size:1.08rem}
 .hero-cta{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.75rem}
+
+/* ---------- bot fleet ---------- */
+/* Own palette tokens: --body and --line are already taken by the page. */
+.fleet{
+  --bot-body:#1a2236;--bot-body-hi:#26314c;--bot-line:#2f3d5e;
+  position:relative;isolation:isolate;overflow:hidden;
+  margin-top:2.6rem;height:clamp(340px,40vw,460px);
+  border:1px solid var(--line);border-radius:var(--r);
+  background:radial-gradient(circle at 50% 40%,#111a2e 0%,#07090f 65%);
+}
+.fleet::before{
+  content:"";position:absolute;inset:60% -50% -20% -50%;z-index:0;
+  background-image:linear-gradient(var(--bot-line) 1px,transparent 1px),linear-gradient(90deg,var(--bot-line) 1px,transparent 1px);
+  background-size:40px 40px;transform:perspective(400px) rotateX(65deg);opacity:.3;pointer-events:none;
+  mask-image:linear-gradient(to top,#000 20%,transparent 90%);
+}
+.fleet-label{position:absolute;top:.95rem;left:1.1rem;z-index:3;pointer-events:none}
+@media(max-width:640px){.fleet{height:540px}}
+
+.fleet .net{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible}
+.fleet .net .link{fill:none;stroke-width:1.6;stroke-linecap:round;opacity:.75;transition:opacity .5s}
+.fleet .net .link.ack{stroke-dasharray:4 7;stroke-width:1.2}
+.fleet .net .ring{fill:none;stroke-width:2;vector-effect:non-scaling-stroke;
+  transform-box:fill-box;transform-origin:center;animation:ring .8s ease-out forwards}
+@keyframes ring{from{transform:scale(.3);opacity:1}to{transform:scale(3.2);opacity:0}}
+
+.gbot{position:absolute;z-index:1;width:clamp(80px,12vw,140px);transform:translate(-50%,-50%);
+  cursor:pointer;-webkit-tap-highlight-color:transparent;transition:left .6s,top .6s}
+.gbot svg{width:100%;height:auto;display:block;overflow:visible}
+.gbot:focus-visible{outline:2px dashed var(--c1);outline-offset:6px;border-radius:12px}
+
+.gbot .rig{animation:float 3.6s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.gbot .shadow{fill:#000;animation:shadow 3.6s ease-in-out infinite;animation-delay:var(--d,0s);transform-origin:130px 300px}
+@keyframes shadow{0%,100%{transform:scaleX(1);opacity:.55}50%{transform:scaleX(.78);opacity:.3}}
+
+.gbot .tip,.gbot .tip2{fill:var(--c2);transform-box:fill-box;transform-origin:center;animation:pulse 1.6s ease-in-out infinite}
+.gbot .tip2{animation-delay:.8s}
+@keyframes pulse{0%,100%{transform:scale(.85);opacity:.55}50%{transform:scale(1.15);opacity:1}}
+
+.gbot .eyes{transform-box:fill-box;transform-origin:center;animation:eyeblink 5s infinite;animation-delay:var(--d,0s)}
+@keyframes eyeblink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+.gbot .look{transition:transform .25s ease-out}
+.gbot .eye{fill:var(--c1)}
+.gbot .screen{stroke:var(--c1)}
+.gbot .glow{filter:drop-shadow(0 0 6px var(--c1))}
+.gbot .glow-2{filter:drop-shadow(0 0 6px var(--c2))}
+
+.gbot.tx .tip{animation:txburst .55s ease-out}
+@keyframes txburst{0%{transform:scale(1)}35%{transform:scale(2.4);fill:#fff}100%{transform:scale(1)}}
+.gbot.rx .screen{animation:rxscreen .6s ease-out}
+@keyframes rxscreen{0%,30%{stroke:#fff;stroke-width:4}}
+.gbot.rx .eye{animation:rxeye .6s ease-out}
+@keyframes rxeye{0%,30%{fill:#fff}}
+.gbot.rx .rig{animation:float 3.6s ease-in-out infinite,jolt .3s ease-out;animation-delay:var(--d,0s),0s}
+@keyframes jolt{30%{translate:0 -6px}}
+
+.dish .aim{transform-origin:130px 128px;transition:transform .35s ease-out}
+.dish .rim{fill:none;stroke:var(--c1);stroke-width:2.5}
+.dish.tx .rim,.dish.rx .rim{animation:rimflash .6s ease-out}
+@keyframes rimflash{0%,35%{stroke:#fff;stroke-width:4}}
+.dish .led{fill:var(--c2);animation:led 1.2s steps(1) infinite;animation-delay:var(--ld)}
+@keyframes led{0%,100%{opacity:.25}50%{opacity:1}}
+.dish.tx .led{animation-duration:.2s}
+
+.beetle .shell-l,.beetle .shell-r{transform-origin:130px 142px;transition:transform .2s ease-out}
+.beetle.tx .shell-l{transform:rotate(22deg)}
+.beetle.tx .shell-r{transform:rotate(-22deg)}
+.beetle .wing{opacity:0;transition:opacity .15s}
+.beetle .wing ellipse{fill:color-mix(in srgb,var(--c1) 35%,transparent);stroke:var(--c1);stroke-width:1.5}
+.beetle .wing-l{transform-origin:118px 150px}
+.beetle .wing-r{transform-origin:142px 150px}
+.beetle.tx .wing{opacity:1}
+.beetle.tx .wing-l{animation:flutL .07s linear infinite alternate}
+.beetle.tx .wing-r{animation:flutR .07s linear infinite alternate}
+@keyframes flutL{from{transform:rotate(-6deg)}to{transform:rotate(8deg)}}
+@keyframes flutR{from{transform:rotate(6deg)}to{transform:rotate(-8deg)}}
+.beetle .legs-l{transform-origin:104px 200px;animation:paddleL 1.3s ease-in-out infinite alternate}
+.beetle .legs-r{transform-origin:156px 200px;animation:paddleR 1.3s ease-in-out infinite alternate}
+@keyframes paddleL{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+@keyframes paddleR{from{transform:rotate(5deg)}to{transform:rotate(-5deg)}}
+.beetle .ant-l{transform-origin:118px 106px;animation:antL 4s ease-in-out infinite alternate}
+.beetle .ant-r{transform-origin:142px 106px;animation:antR 4s ease-in-out infinite alternate}
+@keyframes antL{from{transform:rotate(-4deg)}to{transform:rotate(6deg)}}
+@keyframes antR{from{transform:rotate(4deg)}to{transform:rotate(-6deg)}}
+.beetle.rx .ant-l{animation:flickL .5s ease-out}
+.beetle.rx .ant-r{animation:flickR .5s ease-out}
+.beetle .seam{stroke:var(--c1)}
+
+.lantern .orbit{fill:none;stroke:var(--c1);stroke-width:3;stroke-dasharray:14 10;stroke-linecap:round}
+.lantern .orbit.back{stroke-opacity:.3;animation:spinB 1.4s linear infinite}
+.lantern .orbit.front{animation:spinF 1.4s linear infinite}
+@keyframes spinF{to{stroke-dashoffset:-48}}
+@keyframes spinB{to{stroke-dashoffset:48}}
+.lantern.tx .orbit{animation-duration:.35s}
+.lantern.rx .orbit.front{stroke:#fff}
+.lantern .puff{fill:var(--c1);animation:puff 1.2s ease-in infinite;animation-delay:var(--pd)}
+@keyframes puff{from{transform:translateY(0);opacity:.9}to{transform:translateY(26px);opacity:0}}
+
+.scout .ear-l{transform-origin:100px 86px;animation:twitchL 7s infinite;animation-delay:var(--d,0s)}
+.scout .ear-r{transform-origin:160px 86px;animation:twitchR 7s infinite;animation-delay:var(--d,0s)}
+@keyframes twitchL{0%,88%,96%,100%{transform:rotate(0)}91%{transform:rotate(-12deg)}}
+@keyframes twitchR{0%,90%,98%,100%{transform:rotate(0)}93%{transform:rotate(12deg)}}
+.scout.rx .ear-l{animation:flickL .5s ease-out}
+.scout.rx .ear-r{animation:flickR .5s ease-out}
+@keyframes flickL{30%{transform:rotate(-18deg)}60%{transform:rotate(6deg)}}
+@keyframes flickR{30%{transform:rotate(18deg)}60%{transform:rotate(-6deg)}}
+.scout.tx .ear-r{transform:rotate(-8deg);transition:transform .2s}
+.gbot .pad{fill:var(--c1);transform-origin:130px 264px;animation:pad .2s ease-in-out infinite alternate}
+@keyframes pad{from{transform:scaleX(.85);opacity:.6}to{transform:scaleX(1.1);opacity:1}}
+.scout .chev{stroke:var(--c1)}
+
+@media(prefers-reduced-motion:reduce){
+  .gbot *,.fleet .net *{animation:none!important;transition:none!important}
+}
 
 /* ---------- signature: the replay ---------- */
 .replay{margin-top:3.2rem}
@@ -255,11 +370,24 @@ footer a:hover{color:var(--paper)}
   <section class="hero">
     <div class="wrap">
       <p class="eyebrow">Bot development</p>
-      <h1 class="hero-lede">One bot.<span>Three homes.</span></h1>
+      <h1 class="hero-lede">We build them<span>and we can host them.</span></h1>
       <p class="hero-sub">We build chat bots that run inside Slack, Discord and Telegram — clips, shoutouts, raid calls, go-live alerts, mod tools. Same logic underneath, native controls in every app your community already has open.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#contact">Start a build</a>
         <a class="btn btn-ghost" href="#platforms">See what fits each platform</a>
+      </div>
+
+      <!-- bot fleet: bots trade signals; click or tap one to broadcast -->
+      <div class="fleet" id="fleet">
+        <p class="eyebrow fleet-label">Live fleet · tap a bot to broadcast</p>
+        <svg class="net" id="net" aria-hidden="true">
+          <defs>
+            <filter id="sigGlow" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+              <feGaussianBlur stdDeviation="2.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+        </svg>
       </div>
 
       <!-- signature element -->
@@ -520,6 +648,313 @@ document.querySelectorAll('.chip').forEach(chip => {
 });
 
 play('clip');
+</script>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const stage = document.getElementById('fleet');
+  const net = document.getElementById('net');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- species artwork (all share a 260x320 viewBox) ---------- */
+  const SPECIES = {
+    dish: {
+      label: 'Dish bot',
+      svg: () => `
+      <svg viewBox="0 0 260 320" aria-hidden="true">
+        <ellipse class="shadow" cx="130" cy="300" rx="48" ry="8"/>
+        <g class="rig">
+          <ellipse class="pad glow" cx="130" cy="262" rx="30" ry="5"/>
+          <rect x="84" y="150" width="92" height="100" rx="22" fill="var(--bot-body)" stroke="var(--bot-line)" stroke-width="3"/>
+          <rect class="screen glow" x="98" y="166" width="64" height="42" rx="12" fill="#05070c" stroke-width="2"/>
+          <g class="eyes"><g class="look">
+            <rect class="eye glow" x="108" y="179" width="14" height="16" rx="5"/>
+            <rect class="eye glow" x="138" y="179" width="14" height="16" rx="5"/>
+          </g></g>
+          <rect class="led" style="--ld:0s"  x="104" y="222" width="12" height="6" rx="2"/>
+          <rect class="led" style="--ld:.4s" x="124" y="222" width="12" height="6" rx="2"/>
+          <rect class="led" style="--ld:.8s" x="144" y="222" width="12" height="6" rx="2"/>
+          <rect x="124" y="118" width="12" height="34" rx="4" fill="var(--bot-line)"/>
+          <g class="aim">
+            <path d="M60 82 Q130 160 200 82 Q130 104 60 82 Z" fill="var(--bot-body-hi)" stroke="var(--bot-line)" stroke-width="3" stroke-linejoin="round"/>
+            <path class="rim glow" d="M60 82 Q130 104 200 82"/>
+            <line x1="98" y1="94" x2="130" y2="50" stroke="var(--bot-line)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="162" y1="94" x2="130" y2="50" stroke="var(--bot-line)" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="130" cy="122" r="7" fill="var(--bot-body)" stroke="var(--bot-line)" stroke-width="2"/>
+            <circle class="tip glow-2" cx="130" cy="48" r="7"/>
+          </g>
+        </g>
+      </svg>`
+    },
+
+    beetle: {
+      label: 'Beetle drone',
+      svg: () => `
+      <svg viewBox="0 0 260 320" aria-hidden="true">
+        <ellipse class="shadow" cx="130" cy="300" rx="54" ry="8"/>
+        <g class="rig">
+          <g class="legs-l" fill="none" stroke="var(--bot-line)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M98 194 L72 212 L68 234"/>
+            <path d="M102 212 L84 236 L84 256"/>
+            <path d="M112 226 L100 250 L104 268"/>
+          </g>
+          <g class="legs-r" fill="none" stroke="var(--bot-line)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M162 194 L188 212 L192 234"/>
+            <path d="M158 212 L176 236 L176 256"/>
+            <path d="M148 226 L160 250 L156 268"/>
+          </g>
+          <g class="wing wing-l"><ellipse cx="86" cy="170" rx="48" ry="17" transform="rotate(-28 86 170)"/></g>
+          <g class="wing wing-r"><ellipse cx="174" cy="170" rx="48" ry="17" transform="rotate(28 174 170)"/></g>
+          <ellipse cx="130" cy="192" rx="46" ry="54" fill="var(--bot-body)" stroke="var(--bot-line)" stroke-width="3"/>
+          <g class="shell-l">
+            <path d="M130 142 Q82 146 84 200 Q90 238 130 246 Z" fill="var(--bot-body-hi)" stroke="var(--bot-line)" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="106" cy="184" r="5" fill="var(--c2)" opacity=".7"/>
+            <circle cx="112" cy="214" r="3.5" fill="var(--c2)" opacity=".5"/>
+          </g>
+          <g class="shell-r">
+            <path d="M130 142 Q178 146 176 200 Q170 238 130 246 Z" fill="var(--bot-body-hi)" stroke="var(--bot-line)" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="154" cy="184" r="5" fill="var(--c2)" opacity=".7"/>
+            <circle cx="148" cy="214" r="3.5" fill="var(--c2)" opacity=".5"/>
+          </g>
+          <line class="seam glow" x1="130" y1="148" x2="130" y2="240" stroke-width="2"/>
+          <g class="ant-l">
+            <path d="M118 108 Q104 76 88 60" fill="none" stroke="var(--bot-line)" stroke-width="3" stroke-linecap="round"/>
+            <circle class="tip2 glow-2" cx="88" cy="60" r="5"/>
+          </g>
+          <g class="ant-r">
+            <path d="M142 108 Q156 76 172 60" fill="none" stroke="var(--bot-line)" stroke-width="3" stroke-linecap="round"/>
+            <circle class="tip glow-2" cx="172" cy="60" r="6"/>
+          </g>
+          <ellipse cx="130" cy="124" rx="36" ry="25" fill="var(--bot-body-hi)" stroke="var(--bot-line)" stroke-width="3"/>
+          <ellipse class="screen glow" cx="130" cy="126" rx="25" ry="13" fill="#05070c" stroke-width="2"/>
+          <g class="eyes"><g class="look">
+            <circle class="eye glow" cx="120" cy="126" r="5.5"/>
+            <circle class="eye glow" cx="140" cy="126" r="5.5"/>
+          </g></g>
+        </g>
+      </svg>`
+    },
+
+    lantern: {
+      label: 'Lantern bot',
+      svg: () => `
+      <svg viewBox="0 0 260 320" aria-hidden="true">
+        <ellipse class="shadow" cx="130" cy="300" rx="46" ry="8"/>
+        <g class="rig">
+          <circle class="puff" style="--pd:0s"  cx="130" cy="246" r="5"/>
+          <circle class="puff" style="--pd:.4s" cx="122" cy="246" r="3.5"/>
+          <circle class="puff" style="--pd:.8s" cx="138" cy="246" r="3.5"/>
+          <path d="M108 104 Q108 62 130 62 Q152 62 152 104" fill="none" stroke="var(--bot-line)" stroke-width="6" stroke-linecap="round"/>
+          <circle class="tip glow-2" cx="130" cy="54" r="7"/>
+          <path class="orbit back" d="M34 170 A96 24 0 0 1 226 170"/>
+          <polygon points="94,108 166,108 202,170 166,232 94,232 58,170"
+            fill="var(--bot-body-hi)" stroke="var(--bot-line)" stroke-width="3" stroke-linejoin="round"/>
+          <polygon class="screen glow" points="106,128 154,128 178,170 154,212 106,212 82,170"
+            fill="#05070c" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="116" y="188" width="28" height="4" rx="2" fill="var(--c2)" opacity=".8"/>
+          <g class="eyes"><g class="look">
+            <circle class="eye glow" cx="114" cy="164" r="9"/>
+            <circle class="eye glow" cx="146" cy="164" r="9"/>
+          </g></g>
+          <path class="orbit front glow" d="M34 170 A96 24 0 0 0 226 170"/>
+          <rect x="112" y="232" width="36" height="8" rx="3" fill="var(--bot-body)" stroke="var(--bot-line)" stroke-width="2"/>
+        </g>
+      </svg>`
+    },
+
+    scout: {
+      label: 'Scout bot',
+      svg: () => `
+      <svg viewBox="0 0 260 320" aria-hidden="true">
+        <ellipse class="shadow" cx="130" cy="300" rx="52" ry="8"/>
+        <g class="rig">
+          <ellipse class="pad glow" cx="130" cy="264" rx="32" ry="5"/>
+          <polygon points="96,174 164,174 180,234 130,256 80,234"
+            fill="var(--bot-body)" stroke="var(--bot-line)" stroke-width="3" stroke-linejoin="round"/>
+          <polyline class="chev glow" points="112,204 130,218 148,204" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="chev" points="116,222 130,232 144,222" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>
+          <g class="ear-l">
+            <polygon points="68,98 84,30 122,76" fill="var(--bot-body-hi)" stroke="var(--bot-line)" stroke-width="3" stroke-linejoin="round"/>
+            <polygon points="80,86 87,50 106,74" fill="var(--c2)" opacity=".35"/>
+            <circle class="tip2 glow-2" cx="84" cy="32" r="5"/>
+          </g>
+          <g class="ear-r">
+            <polygon points="192,98 176,30 138,76" fill="var(--bot-body-hi)" stroke="var(--bot-line)" stroke-width="3" stroke-linejoin="round"/>
+            <polygon points="180,86 173,50 154,74" fill="var(--c2)" opacity=".35"/>
+            <circle class="tip glow-2" cx="176" cy="32" r="6"/>
+          </g>
+          <polygon points="56,92 204,92 216,128 130,180 44,128"
+            fill="var(--bot-body-hi)" stroke="var(--bot-line)" stroke-width="3" stroke-linejoin="round"/>
+          <polygon class="screen glow" points="76,108 184,108 192,126 130,158 68,126"
+            fill="#05070c" stroke-width="2" stroke-linejoin="round"/>
+          <g class="eyes"><g class="look">
+            <polygon class="eye glow" points="86,116 120,121 116,134 92,130"/>
+            <polygon class="eye glow" points="174,116 140,121 144,134 168,130"/>
+          </g></g>
+        </g>
+      </svg>`
+    }
+  };
+
+  /* ---------- fleet config ---------- */
+  const FLEET = [               // [species, primary, accent]
+    ['dish',    '#00f0ff', '#ff2bd6'],
+    ['scout',   '#ffd400', '#ff2bd6'],
+    ['lantern', '#ff8a3d', '#ffd400'],
+    ['beetle',  '#9b7bff', '#00f0ff'],
+    ['scout',   '#7cff6b', '#00f0ff'],
+    ['lantern', '#ff2bd6', '#7cff6b'],
+  ];
+  const LAYOUT_WIDE   = [[10,62],[26,30],[43,66],[58,28],[75,64],[90,32]];
+  const LAYOUT_NARROW = [[27,18],[73,26],[27,50],[73,56],[27,82],[73,84]];
+  const MAX_ACTIVE = 3;
+  let onScreen = true;
+  new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(stage);
+
+  const bots = FLEET.map(([kind, c1, c2], i) => {
+    const el = document.createElement('div');
+    el.className = `gbot ${kind}`;
+    el.tabIndex = 0;
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-label', `${SPECIES[kind].label}. Activate to broadcast a signal.`);
+    el.style.setProperty('--c1', c1);
+    el.style.setProperty('--c2', c2);
+    el.style.setProperty('--d', `${(-Math.random() * 3.6).toFixed(2)}s`);
+    el.innerHTML = SPECIES[kind].svg(i);
+    stage.appendChild(el);
+    const bot = { el, c1, tip: el.querySelector('.tip'), look: el.querySelector('.look'),
+                  aim: el.querySelector('.aim'), lockUntil: 0 };
+    el.addEventListener('click', () => broadcast(bot));
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); broadcast(bot); }
+    });
+    return bot;
+  });
+
+  const narrowMQ = matchMedia('(max-width: 640px)');
+  function layout() {
+    const L = narrowMQ.matches ? LAYOUT_NARROW : LAYOUT_WIDE;
+    bots.forEach((b, i) => { b.el.style.left = L[i][0] + '%'; b.el.style.top = L[i][1] + '%'; });
+  }
+  layout();
+  narrowMQ.addEventListener('change', layout);
+
+  /* ---------- helpers ---------- */
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+  const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+  const svgEl = (tag, attrs = {}) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  };
+  function tipPos(bot) {
+    const s = stage.getBoundingClientRect(), r = bot.tip.getBoundingClientRect();
+    return { x: r.left + r.width / 2 - s.left, y: r.top + r.height / 2 - s.top };
+  }
+  function pulseClass(el, cls, ms = 650) {
+    el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
+    clearTimeout(el['_t' + cls]);
+    el['_t' + cls] = setTimeout(() => el.classList.remove(cls), ms);
+  }
+  function lookAt(bot, x, y, lockMs = 0) {
+    if (reduce) return;
+    const s = stage.getBoundingClientRect(), r = bot.el.getBoundingClientRect();
+    const cx = r.left + r.width / 2 - s.left, cy = r.top + r.height * 0.38 - s.top;
+    const dx = x - cx, dy = y - cy, d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 250);
+    bot.look.style.transform = `translate(${(dx / d * 7 * k).toFixed(1)}px, ${(dy / d * 4 * k).toFixed(1)}px)`;
+    if (bot.aim) bot.aim.style.transform = `rotate(${(dx / d * 30 * k).toFixed(1)}deg)`; // dish swivels toward target
+    if (lockMs) bot.lockUntil = performance.now() + lockMs;
+  }
+  function ring(x, y, color) {
+    const c = svgEl('circle', { class: 'ring', cx: x, cy: y, r: 8, stroke: color });
+    net.appendChild(c);
+    setTimeout(() => c.remove(), 900);
+  }
+
+  /* ---------- the signal ---------- */
+  let active = 0;
+  function send(a, b, { ack = false, packets = 3, dur = 1500 } = {}) {
+    return new Promise(resolve => {
+      active++;
+      const color = a.c1;
+      const g = svgEl('g', { filter: 'url(#sigGlow)' });
+      const path = svgEl('path', { class: 'link' + (ack ? ' ack' : ''), stroke: color, pathLength: 1 });
+      if (!ack) { path.style.strokeDasharray = 1; path.style.strokeDashoffset = 1; }
+      else path.style.opacity = 0;
+      g.appendChild(path);
+      const dots = reduce ? [] : Array.from({ length: packets }, (_, k) =>
+        g.appendChild(svgEl('circle', { r: k === 0 ? 4.5 : 3, fill: k === 0 ? '#fff' : color })));
+      net.appendChild(g);
+
+      pulseClass(a.el, 'tx', 700);
+      const s0 = tipPos(a), e0 = tipPos(b);
+      ring(s0.x, s0.y, color);
+      lookAt(a, e0.x, e0.y, dur + 400);
+
+      const total = reduce ? 600 : dur;
+      const start = performance.now();
+      let lookedBack = false;
+
+      function frame(now) {
+        const t = clamp((now - start) / total);
+        const p0 = tipPos(a), p2 = tipPos(b);
+        const dist = Math.hypot(p2.x - p0.x, p2.y - p0.y);
+        const m = { x: (p0.x + p2.x) / 2, y: Math.max(10, Math.min(p0.y, p2.y) - dist * 0.22 - 20) };
+        path.setAttribute('d', `M${p0.x},${p0.y} Q${m.x},${m.y} ${p2.x},${p2.y}`);
+
+        if (reduce) { path.style.strokeDashoffset = 0; path.style.opacity = .75; }
+        else if (!ack) path.style.strokeDashoffset = 1 - clamp(t / 0.3);
+        else path.style.opacity = clamp(t / 0.2) * 0.6;
+
+        dots.forEach((dot, k) => {
+          const u = clamp((t - 0.15 - k * 0.07) / 0.75);
+          const e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+          dot.setAttribute('cx', (1 - e) ** 2 * p0.x + 2 * (1 - e) * e * m.x + e * e * p2.x);
+          dot.setAttribute('cy', (1 - e) ** 2 * p0.y + 2 * (1 - e) * e * m.y + e * e * p2.y);
+          dot.style.opacity = u <= 0 || u >= 1 ? 0 : 1;
+        });
+
+        if (!lookedBack && t > 0.45) { lookedBack = true; lookAt(b, p0.x, p0.y, 1400); }
+
+        if (t < 1) return requestAnimationFrame(frame);
+        pulseClass(b.el, 'rx', 650);
+        ring(p2.x, p2.y, color);
+        path.style.opacity = 0;
+        setTimeout(() => { g.remove(); active--; resolve(); }, 550);
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+
+  async function exchange() {
+    const a = rand(bots);
+    const b = rand(bots.filter(x => x !== a));
+    await send(a, b, { packets: 1 + Math.floor(Math.random() * 3) });
+    if (Math.random() < 0.45) {
+      await wait(200);
+      await send(b, a, { ack: true, packets: 1, dur: 1000 });
+    }
+  }
+
+  function broadcast(a) {
+    bots.filter(b => b !== a).forEach((b, i) =>
+      setTimeout(() => send(a, b, { packets: 1, dur: 1100 }), i * 90));
+  }
+
+  (function tick() {
+    if (!document.hidden && onScreen && active < MAX_ACTIVE) {
+      Math.random() < 0.1 ? broadcast(rand(bots)) : exchange();
+    }
+    setTimeout(tick, 900 + Math.random() * 1700);
+  })();
+
+  addEventListener('pointermove', e => {
+    const s = stage.getBoundingClientRect(), now = performance.now();
+    bots.forEach(b => { if (now > b.lockUntil) lookAt(b, e.clientX - s.left, e.clientY - s.top); });
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>
