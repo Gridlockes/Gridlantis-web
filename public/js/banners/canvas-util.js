@@ -19,8 +19,8 @@ export const BASE_H = 400;
  * The authoring space is 3:1 but .banner-viewport is 2:1 (and never shorter
  * than 320px), so the two ratios only coincide around 1920px wide. Fitting to
  * width, as this used to do, left a band of dead canvas below the artwork at
- * every other size and — because the whole 1200px space was squeezed into a
- * ~350px phone — shrank the hardcoded 11px labels to about 3px.
+ * every other size and (because the whole 1200px space was squeezed into a
+ * ~350px phone) shrank the hardcoded 11px labels to about 3px.
  *
  * So scale to *cover* the box and centre the overflow, which is what the
  * stylesheet already asks for via object-fit. Wide screens are unchanged;

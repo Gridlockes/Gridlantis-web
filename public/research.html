@@ -145,7 +145,7 @@ a{ color: inherit; }
 }
 
 /* Touch targets. The chips, the masthead links and the contact rows are all
-   sized to their (small, monospaced) text, which leaves a 21-27px box — well
+   sized to their (small, monospaced) text, which leaves a 21-27px box, well
    under the 44px a fingertip needs. */
 @media (max-width: 780px){
   .chip{ min-height: 44px; }
@@ -649,7 +649,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
         <figure class="entry-media">
           <img src="/flybrain_neurons_pic.webp" width="1621" height="855" loading="lazy" decoding="async"
                alt="Rendering of an adult fruit fly brain from the FlyWire connectome, with optic lobes, mushroom bodies, and central complex neurons traced in blue, orange, and magenta.">
-          <figcaption>FlyWire FAFB &mdash; adult brain, traced neuron populations</figcaption>
+          <figcaption>FlyWire FAFB: adult brain, traced neuron populations</figcaption>
         </figure>
       </div>
     </article>
@@ -685,7 +685,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
         <figure class="entry-media">
           <img src="/Rimdar.png" width="900" height="821" loading="lazy" decoding="async"
                alt="Line drawing of the R.I.M.D.A.R rover, front view: four-wheel chassis, stacked compute and battery decks, and a forward-facing ultrasonic rangefinder.">
-          <figcaption>R.I.M.D.A.R &mdash; front elevation</figcaption>
+          <figcaption>R.I.M.D.A.R: front elevation</figcaption>
         </figure>
       </div>
     </article>
@@ -914,7 +914,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
       })
         .then(function (res) {
           if (!res.ok) throw new Error(res.status);
-          show("Thanks \u2014 that's with us. You'll get a reply at the address you gave.", false);
+          show("Thanks, that's with us. You'll get a reply at the address you gave.", false);
           askForm.reset();
         })
         .catch(function () {

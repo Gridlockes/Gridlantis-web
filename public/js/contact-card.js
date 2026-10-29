@@ -1,5 +1,5 @@
 /**
- * <contact-card> — a native Web Component. No framework, no build step.
+ * <contact-card>: a native Web Component. No framework, no build step.
  *
  * Usage:
  *   <script type="module" src="/js/contact-card.js"></script>

@@ -21,7 +21,7 @@
  * then fades back out to blank before repeating. That loop length used to
  * exactly match AUTOPLAY_MS in banner-carousel.js, which meant every autoplay
  * pass landed here just in time to watch the dashboard dissolve to a blank
- * navy rectangle for its last ~1.4s before the carousel cut away — reading as
+ * navy rectangle for its last ~1.4s before the carousel cut away, reading as
  * the slide breaking rather than looping. Elapsed time is now left unwrapped
  * and the exit fade dropped: the dashboard reveals once and then holds
  * (with the background dots and chart pulse still animating), matching how

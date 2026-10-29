@@ -37,7 +37,7 @@ export function initBannerCarousel(rootSelector = "[data-banner-carousel]") {
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  // Build one instance per slide, lazily — constructing the neuron banner
+  // Build one instance per slide, lazily: constructing the neuron banner
   // generates L-system geometry, so we don't pay for it until it's shown.
   const instances = new Array(slides.length).fill(null);
 

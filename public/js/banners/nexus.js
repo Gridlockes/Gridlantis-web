@@ -1,7 +1,7 @@
 /**
  * Communication hub-and-spoke banner.
  * Icon markup was converted from Tabler Icons to Font Awesome 6, which is what
- * index.html actually loads — the original `ti ti-*` classes rendered nothing.
+ * index.html actually loads; the original `ti ti-*` classes rendered nothing.
  */
 
 import { fitCanvas, onResize, prefersReducedMotion } from "./canvas-util.js";

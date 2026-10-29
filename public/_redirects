@@ -5,7 +5,7 @@
 # GitHub Releases instead, and these rules point at them.
 #
 # The value of the indirection: every link on the site is a gridlantis.org
-# URL. If the binaries move — to R2, to a CDN, anywhere — only this file
+# URL. If the binaries move (to R2, to a CDN, anywhere), only this file
 # changes, and no published link ever breaks.
 #
 # Targets use /releases/latest/, so a new release is picked up automatically
