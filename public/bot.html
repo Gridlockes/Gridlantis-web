@@ -120,7 +120,6 @@ p{margin:0}
   background-size:40px 40px;transform:perspective(400px) rotateX(65deg);opacity:.3;pointer-events:none;
   mask-image:linear-gradient(to top,#000 20%,transparent 90%);
 }
-.fleet-label{position:absolute;top:.95rem;left:1.1rem;z-index:3;pointer-events:none}
 @media(max-width:640px){.fleet{height:540px}}
 
 .fleet .net{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible}
@@ -370,7 +369,6 @@ footer a:hover{color:var(--paper)}
   <!-- HERO -->
   <section class="hero">
     <div class="wrap">
-      <p class="eyebrow">Bot development</p>
       <h1 class="hero-lede">We build them<span>and we can host them.</span></h1>
       <p class="hero-sub">We build chat bots that run inside Slack, Discord and Telegram — clips, shoutouts, raid calls, go-live alerts, mod tools. Same logic underneath, native controls in every app your community already has open.</p>
       <div class="hero-cta">
@@ -380,7 +378,6 @@ footer a:hover{color:var(--paper)}
 
       <!-- bot fleet: bots trade signals; click or tap one to broadcast -->
       <div class="fleet" id="fleet">
-        <p class="eyebrow fleet-label">Live fleet · tap a bot to broadcast</p>
         <svg class="net" id="net" aria-hidden="true">
           <defs>
             <filter id="sigGlow" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
