@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>For business owners | Gridlantis</title>
-<meta name="description" content="Websites, workflow bots and reporting dashboards for businesses of every size and independent operators.">
+<meta name="description" content="Websites, workflow bots, reporting dashboards and phone number rerouting for businesses of every size and independent operators.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Gridlantis">
 <meta property="og:title" content="For business owners | Gridlantis">
-<meta property="og:description" content="Websites, workflow bots and reporting dashboards for businesses of every size and independent operators.">
+<meta property="og:description" content="Websites, workflow bots, reporting dashboards and phone number rerouting for businesses of every size and independent operators.">
 <meta property="og:url" content="https://gridlantis.org/business">
 <meta property="og:image" content="https://gridlantis.org/Gridlantis_prebanner.png">
 <meta property="og:image:width" content="600">
@@ -590,6 +590,10 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
         <h3>Custom dashboards</h3>
         <p>One screen with the four or five numbers you actually check, pulled from wherever they already live.</p>
       </li>
+      <li>
+        <h3>Phone number rerouting</h3>
+        <p>Your business number, pointed wherever it needs to ring: a cell, the front desk or whoever's on shift.</p>
+      </li>
     </ul>
   </div>
 </section>
@@ -718,7 +722,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
       </div>
     </div>
 
-    <form id="contact-form" novalidate>
+    <form id="contact-form" action="https://formspree.io/f/mbdlnzzb" method="POST">
       <div class="row-2">
         <div class="field">
           <label for="name">Your name</label>
@@ -739,6 +743,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
           <option>A business website</option>
           <option>A workflow bot</option>
           <option>A custom dashboard</option>
+          <option>Phone number rerouting</option>
           <option>Not sure yet</option>
         </select>
       </div>
@@ -746,8 +751,11 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
         <label for="message">What's the problem?</label>
         <textarea id="message" name="message" placeholder="What you do, what's slow, and what you've already tried."></textarea>
       </div>
+      <input type="hidden" name="_subject" value="Business inquiry">
+      <!-- honeypot: bots fill it, people never see it -->
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" hidden>
       <button class="btn btn--send" type="submit">Send message</button>
-      <p class="form-note" id="form-note">Connect this form to an endpoint before launch. It doesn't send anywhere yet.</p>
+      <p class="form-note" id="form-note" role="status"></p>
     </form>
   </div>
 </section>
@@ -819,12 +827,35 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
     btn.addEventListener("click", function () { select(btn.dataset.key); });
   });
 
+  // Posts to Formspree in place. Falls back to a normal form POST without JS.
   var form = document.getElementById("contact-form");
   var note = document.getElementById("form-note");
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      note.textContent = "No endpoint connected yet. Email Gridlantis@gmail.com in the meantime.";
+
+      var send = form.querySelector(".btn--send");
+      var label = send.textContent;
+      send.disabled = true;
+      send.textContent = "Sending";
+
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" }
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.status);
+          note.textContent = "Thanks, that's with us. You'll get a reply at the address you gave.";
+          form.reset();
+        })
+        .catch(function () {
+          note.textContent = "That didn't send. Email Gridlantis@gmail.com directly and we'll pick it up there.";
+        })
+        .then(function () {
+          send.disabled = false;
+          send.textContent = label;
+        });
     });
   }
 

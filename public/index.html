@@ -1786,7 +1786,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
               if (response.ok) {
                 messageDiv.className = "message success";
                 messageDiv.innerHTML =
-                  '<i class="fas fa-check-circle"></i> Thank you for subscribing. You will receive a confirmation email shortly.';
+                  `<i class="fas fa-check-circle"></i> Thanks, that's with us. You'll get a reply at the address you gave.`;
                 messageDiv.style.display = "block";
                 form.reset();
                 messageDiv.scrollIntoView({
@@ -1799,7 +1799,7 @@ h1,h2,h3,h4,h5,h6{font-family:"Krona One",-apple-system,"Segoe UI",sans-serif!im
             } catch (error) {
               messageDiv.className = "message error";
               messageDiv.innerHTML =
-                '<i class="fas fa-exclamation-circle"></i> Unable to process subscription. Please try again later.';
+                `<i class="fas fa-exclamation-circle"></i> That didn't send. Email Gridlantis@gmail.com directly and we'll pick it up there.`;
               messageDiv.style.display = "block";
               messageDiv.scrollIntoView({
                 behavior: "smooth",
